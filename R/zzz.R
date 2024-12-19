@@ -2,24 +2,24 @@
 #' @noRd
 .onAttach <- function(libname, pkgname) {
   if (!grepl(x = R.Version()$arch, pattern = "64")) {
-    warning("The text package requires running R on a 64-bit systems
+    warning("The talk-package requires running R on a 64-bit systems
             as it is dependent on torch from ptyhon; and you're
             system is not 64-bit.")
   }
 
-  text_version_nr <- tryCatch(
+  talk_version_nr <- tryCatch(
     {
-      text_version_nr1 <- paste(" (version ", packageVersion("text"), ")", sep = "")
+      talk_version_nr1 <- paste(" (version ", packageVersion("talk"), ")", sep = "")
     },
     error = function(e) {
-      text_version_nr1 <- ""
+      talk_version_nr1 <- ""
     }
   )
 
   packageStartupMessage(
     colourise(
-      paste("This is text",
-        text_version_nr,
+      paste("This is talk.",
+        talk_version_nr,
         ".\n",
         sep = ""
       ),
@@ -28,38 +28,38 @@
     colourise("Newer versions may have improved functions and updated defaults to reflect current understandings of the state-of-the-art.",
       fg = "green", bg = NULL
     ),
-    colourise("\n\nFor more information about the package see www.r-text.org.",
+    colourise("\n\nFor more information about the package see www.r-talk.org.",
       fg = "purple", bg = NULL
     )
   )
 
-  if (isTRUE(check_textrpp_python_options()$val == "textrpp_condaenv")) {
-    textrpp_initialize(check_env = FALSE)
+  if (isTRUE(check_talkrpp_python_options()$val == "talkrpp_condaenv")) {
+    talkrpp_initialize(check_env = FALSE)
   }
 }
 
 # Below function is from testthat:
-# https://github.com/r-lib/testthat/blob/717b02164def5c1f027d3a20b889dae35428b6d7/R/colour-text.r
-#' Colourise text for display in the terminal.
+# https://github.com/r-lib/testthat/blob/717b02164def5c1f027d3a20b889dae35428b6d7/R/colour-talk.r
+#' Colourise talk for display in the terminal.
 #'
 #' If R is not currently running in a system that supports terminal colours
-#' the text will be returned unchanged.
+#' the talk will be returned unchanged.
 #'
 #' Allowed colours are: black, blue, brown, cyan, dark gray, green, light
 #' blue, light cyan, light gray, light green, light purple, light red,
 #' purple, red, white, yellow
 #'
-#' @param text character vector
+#' @param talk character vector
 #' @param fg foreground colour, defaults to white
 #' @param bg background colour, defaults to transparent
 # @examples
 #' @noRd
-colourise <- function(text, fg = "black", bg = NULL) {
+colourise <- function(talk, fg = "black", bg = NULL) {
   term <- Sys.getenv()["TERM"]
   colour_terms <- c("xterm-color", "xterm-256color", "screen", "screen-256color")
 
   if (rcmd_running() || !any(term %in% colour_terms, na.rm = TRUE)) {
-    return(text)
+    return(talk)
   }
 
   col_escape <- function(col) {
@@ -73,7 +73,7 @@ colourise <- function(text, fg = "black", bg = NULL) {
 
   init <- col_escape(col)
   reset <- col_escape("0")
-  paste0(init, text, reset)
+  paste0(init, talk, reset)
 }
 
 .fg_colours <- c(

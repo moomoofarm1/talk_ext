@@ -3,11 +3,11 @@
 
 conda_args <- reticulate:::conda_args
 
-#' Install text required python packages in conda or virtualenv environment
+#' Install talk required python packages in conda or virtualenv environment
 #'
-#' @description Install text required python packages (rpp) in a self-contained environment.
+#' @description Install talk required python packages (rpp) in a self-contained environment.
 #' For macOS and Linux-based systems, this will also install Python itself via a "miniconda" environment, for
-#'   \code{textrpp_install}.  Alternatively, an existing conda installation may be
+#'   \code{talkrpp_install}.  Alternatively, an existing conda installation may be
 #'   used, by specifying its path.  The default setting of \code{"auto"} will
 #'   locate and use an existing installation automatically, or download and
 #'   install one if none exists.
@@ -32,24 +32,24 @@ conda_args <- reticulate:::conda_args
 #'   installation.
 #' @param python_path character; path to Python only for virtualenvironment installation
 #' @param bin character; e.g., "python", only for virtualenvironment installation
-#' @param envname character; name of the conda-environment to install text required python packages.
-#'   Default is "textrpp_condaenv".
+#' @param envname character; name of the conda-environment to install talk required python packages.
+#'   Default is "talkrpp_condaenv".
 #' @param prompt logical; ask whether to proceed during the installation
 #' @examples
 #' \dontrun{
-#' # install text required python packages in a miniconda environment (macOS and Linux)
-#' textrpp_install(prompt = FALSE)
+#' # install talk required python packages in a miniconda environment (macOS and Linux)
+#' talkrpp_install(prompt = FALSE)
 #'
-#' # install text required python packages to an existing conda environment
-#' textrpp_install(conda = "~/anaconda/bin/")
+#' # install talk required python packages to an existing conda environment
+#' talkrpp_install(conda = "~/anaconda/bin/")
 #' }
 #' @export
-textrpp_install <- function(conda = "auto",
+talkrpp_install <- function(conda = "auto",
                             update_conda = FALSE,
                             force_conda = FALSE,
                             rpp_version = "rpp_version_system_specific_defaults",
                             python_version = "python_version_system_specific_defaults",
-                            envname = "textrpp_condaenv",
+                            envname = "talkrpp_condaenv",
                             pip = TRUE,
                             python_path = NULL,
                             prompt = TRUE) {
@@ -57,23 +57,32 @@ textrpp_install <- function(conda = "auto",
   if (rpp_version[[1]] == "rpp_version_system_specific_defaults") {
     if (is_osx() || is_linux()) {
       rpp_version <- c(
+        # talk
+        "argparse",
         "torch==2.2.0",
         "transformers==4.38.0",
-        "huggingface_hub==0.20.0",
-        "numpy==1.26.0",
         "pandas==2.0.3",
-        "nltk==3.8.1",
-        "scikit-learn==1.3.0", # higher versions 1.4 and 1.5 yield errors in textTopics() and warnings in textTrain
-        "datasets==2.16.1",
-        "evaluate==0.4.0",
-        "accelerate==0.26.0",
-        "bertopic==0.16.3",
-        "jsonschema==4.19.2",
-        "sentence-transformers==2.2.2",
-        "flair==0.13.0",
-        "umap-learn==0.5.6",
-        "hdbscan==0.8.33",
-        "scipy==1.10.1"
+        "tqdm",
+        "numpy<2"
+
+        # text
+#        "huggingface_hub==0.20.0",
+#        "numpy==1.26.0",
+#        "nltk==3.8.1",
+#        "scikit-learn==1.3.0", # higher versions 1.4 and 1.5 yield errors in talkTopics() and warnings in talkTrain
+#        "datasets==2.16.1",
+#        "evaluate==0.4.0",
+#        "accelerate==0.26.0",
+#        "bertopic==0.16.3",
+#        "jsonschema==4.19.2",
+#        "sentence-transformers==2.2.2",
+#        "flair==0.13.0",
+#        "umap-learn==0.5.6",
+#        "hdbscan==0.8.33",
+#        "scipy==1.10.1"
+#
+
+
       )
     }
     if (is_windows()) {
@@ -117,7 +126,7 @@ textrpp_install <- function(conda = "auto",
   # verify 64-bit
   if (.Machine$sizeof.pointer != 8) {
     stop(
-      "Unable to install the text-package on this platform.",
+      "Unable to install the talk-package on this platform.",
       "Binary installation is only available for 64-bit platforms."
     )
   }
@@ -138,7 +147,7 @@ textrpp_install <- function(conda = "auto",
     if (!have_conda) {
       message("No conda was found in the system. ")
       if (prompt) {
-        ans <- utils::menu(c("No", "Yes"), title = "Do you want Text to download
+        ans <- utils::menu(c("No", "Yes"), title = "Do you want talk to download
                            miniconda using reticulate::install_miniconda()?")
       } else {
         ans <- 2 # When no prompt is set to false, default to install miniconda.
@@ -156,8 +165,8 @@ textrpp_install <- function(conda = "auto",
       reticulate::install_miniconda(update = update_conda, force = force_conda)
     }
 
-    # process the installation of text required python packages
-    process_textrpp_installation_conda(conda,
+    # process the installation of talk required python packages
+    process_talkrpp_installation_conda(conda,
       rpp_version,
       python_version,
       prompt,
@@ -191,8 +200,8 @@ textrpp_install <- function(conda = "auto",
     if (have_conda && update_conda || have_conda && force_conda) {
       reticulate::install_miniconda(update = update_conda, force = force_conda)
     }
-    # process the installation of text required python packages
-    process_textrpp_installation_conda(conda,
+    # process the installation of talk required python packages
+    process_talkrpp_installation_conda(conda,
       rpp_version,
       python_version,
       prompt,
@@ -211,17 +220,17 @@ textrpp_install <- function(conda = "auto",
   )
 
   message(colourise(
-    "Great work - do not forget to initialize the environment \nwith textrpp_initialize().\n",
+    "Great work - do not forget to initialize the environment \nwith talkrpp_initialize().\n",
     fg = "green", bg = NULL
   ))
   invisible(NULL)
 }
 
-process_textrpp_installation_conda <- function(conda,
+process_talkrpp_installation_conda <- function(conda,
                                                rpp_version,
                                                python_version,
                                                prompt = TRUE,
-                                               envname = "textrpp_condaenv",
+                                               envname = "talkrpp_condaenv",
                                                pip = FALSE) {
   conda_envs <- reticulate::conda_list(conda = conda)
   if (prompt) {
@@ -231,8 +240,8 @@ process_textrpp_installation_conda <- function(conda,
   conda_env <- subset(conda_envs, conda_envs$name == envname)
   if (nrow(conda_env) == 1) {
     message(
-      "Using existing conda environment ", envname, " for text installation\n.",
-      "\ntext:",
+      "Using existing conda environment ", envname, " for talk installation\n.",
+      "\ntalk:",
       paste(rpp_version, collapse = ", "), "will be installed.  "
     )
   } else {
@@ -240,14 +249,14 @@ process_textrpp_installation_conda <- function(conda,
       "A new conda environment", paste0('"', envname, '"'), "will be created and \npython required packages:",
       paste(rpp_version, collapse = ", "), "will be installed.  "
     )
-    message("Creating", envname, "conda environment for text installation...\n")
+    message("Creating", envname, "conda environment for talk installation...\n")
     python_packages <- ifelse(is.null(python_version), "python=3.9",
       sprintf("python=%s", python_version)
     )
     python <- reticulate::conda_create(envname, packages = python_packages, conda = conda)
   }
 
-  message("Installing text required python packages...\n")
+  message("Installing talk required python packages...\n")
   packages <- rpp_version
 
   reticulate::conda_install(envname, packages, pip = pip, conda = conda)
@@ -255,15 +264,15 @@ process_textrpp_installation_conda <- function(conda,
 
 
 
-process_textrpp_installation_virtualenv <- function(python = "/usr/local/bin/python3.9",
+process_talkrpp_installation_virtualenv <- function(python = "/usr/local/bin/python3.9",
                                                     rpp_version,
                                                     pip_version,
-                                                    envname = "textrpp_virtualenv",
+                                                    envname = "talkrpp_virtualenv",
                                                     prompt = TRUE) {
   libraries <- paste(rpp_version, collapse = ", ")
   message(sprintf(
     'A new virtual environment called "%s" will be created using "%s" \n and,
-    the following text reuired python packages will be installed: \n "%s" \n \n',
+    the following talk reuired python packages will be installed: \n "%s" \n \n',
     envname, python, libraries
   ))
   if (prompt) {
@@ -303,18 +312,18 @@ python_unix_binary <- function(bin) {
   }
 }
 
-#' @rdname textrpp_install
+#' @rdname talkrpp_install
 #' @description If you wish to install Python in a "virtualenv", use the
-#'   \code{textrpp_install_virtualenv} function. It requires that you have a python version
+#'   \code{talkrpp_install_virtualenv} function. It requires that you have a python version
 #'   and path to it (such as "/usr/local/bin/python3.9" for Mac and Linux.).
 #' @param pip_version character;
 #' @examples
 #' \dontrun{
-#' # install text required python packages in a virtual environment
-#' textrpp_install_virtualenv()
+#' # install talk required python packages in a virtual environment
+#' talkrpp_install_virtualenv()
 #' }
 #' @export
-textrpp_install_virtualenv <- function(rpp_version = c("torch==2.0.0",
+talkrpp_install_virtualenv <- function(rpp_version = c("torch==2.0.0",
                                                        "transformers==4.19.2",
                                                        "numpy",
                                                        "pandas",
@@ -322,7 +331,7 @@ textrpp_install_virtualenv <- function(rpp_version = c("torch==2.0.0",
                                        python_path = NULL, # "/usr/local/bin/python3.9",
                                        pip_version = NULL,
                                        bin = "python3",
-                                       envname = "textrpp_virtualenv",
+                                       envname = "talkrpp_virtualenv",
                                        prompt = TRUE) {
   # find system python binary
   if (!is.null(python_path)) {
@@ -336,7 +345,7 @@ textrpp_install_virtualenv <- function(rpp_version = c("torch==2.0.0",
     stop("Unable to locate Python on this system.", call. = FALSE)
   }
 
-  process_textrpp_installation_virtualenv(
+  process_talkrpp_installation_virtualenv(
     python = python,
     pip_version = pip_version,
     rpp_version = rpp_version,
@@ -353,17 +362,17 @@ textrpp_install_virtualenv <- function(rpp_version = c("torch==2.0.0",
 }
 
 
-#' Uninstall textrpp conda environment
+#' Uninstall talkrpp conda environment
 #'
-#' Removes the conda environment created by textrpp_install()
+#' Removes the conda environment created by talkrpp_install()
 #' @param conda path to conda executable, default to "auto" which automatically
 #'   finds the path
 #' @param prompt logical; ask whether to proceed during the installation
 #' @param envname character; name of conda environment to remove
 #' @export
-textrpp_uninstall <- function(conda = "auto",
+talkrpp_uninstall <- function(conda = "auto",
                               prompt = TRUE,
-                              envname = "textrpp_condaenv") {
+                              envname = "talkrpp_condaenv") {
   conda <- tryCatch(reticulate::conda_binary(conda), error = function(e) NULL)
   have_conda <- !is.null(conda)
 

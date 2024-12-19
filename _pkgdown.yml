@@ -7,17 +7,17 @@ development:
    mode: default
 #   mode: unreleased
 home:
-  title: text
-  description: Analyses of Text using Transformers from HuggingFace, Natural Language Processing and Machine Learning.
+  title: talk
+  description: Analyses of talk in audio recordings using transformers models such as Whisper from HuggingFace.
   links:
-  - text: Ask a question about text using the r-text tag
+  - text: Ask a question about talk using the r-talk tag
     href: https://stackoverflow.com/
 
 template:
   opengraph:
     image:
       src: man/figures/logo.png
-      alt: "text analyzes using huggingface transformers"
+      alt: "talk analyzes using huggingface transformers"
     twitter:
       creator: "@oscarkjell"
 #      site: "@rstudio"
@@ -38,94 +38,17 @@ twitter:
 reference:
 - title: Installation
   contents:
-  - textrpp_install
-  - textrpp_install_virtualenv
-  - textrpp_uninstall
-  - textrpp_initialize
-- title: Transform text to word embeddings
+  - talkrpp_install
+  - talkrpp_install_virtualenv
+  - talkrpp_uninstall
+  - talkrpp_initialize
+- title: Transform talk to word embeddings
   contents:
+  - talkText
   - textEmbed
-  - textDimName
-  - textEmbedRawLayers
-  - textEmbedLayerAggregation
-  - textEmbedReduce
-  - textEmbedStatic
-- title: Fine-tuning models
-  contents:
-  - textFineTuneTask
-  - textFineTuneDomain
-- title: Text language analysis tasks
-  contents:
-  - textGeneration
-  - textNER
-  - textSum
-  - textQA
-  - textTranslate
-  - textZeroShot
-- title: The text-train functions
-  contents:
-    - textTrain
-    - textTrainLists
-    - textTrainRegression
-    - textTrainRandomForest
-    - textTrainN
-    - textTrainNPlot
-- title: The text-predict functions
-  contents:
-    - textPredict
-    - textAssess
-    - textClassify
-    - textPredictTest
-    - textPredictAll
-    - textLBAM
-- title: Semantic similarities and distances functions
-  contents:
-    - textSimilarity
-    - textDistance
-    - textSimilarityMatrix
-    - textDistanceMatrix
-    - textSimilarityNorm
-    - textDistanceNorm
-- title: Visualise words in the word embedding space
-  contents:
-    - textProjection
-    - textPlot
-    - textProjectionPlot
-#    - textWordPrediction
-    - textCentrality
-    - textCentralityPlot
-    - textPCA
-    - textPCAPlot
-- title: BERTopics
-  contents:
-    - textTopics
-    - textTopicsTest
-    - textTopicsWordcloud
-    - textTopicsReduce
-    - textTopicsTree
-- title: View or delete downloaded HuggingFace models
-  contents:
-  - textModels
-  - textModelLayers
-  - textModelsRemove
-- title: Miscellaneous
-  contents:
-    - textDescriptives
-    - textClean
-    - textTokenize
-    - textTokenizeAndCount
-    - textDomainCompare
-    - textFindNonASCII
-    - textCleanNonASCII
 - title: Example Data
   contents:
-    - Language_based_assessment_data_8
-    - word_embeddings_4
-    - raw_embeddings_1
-    - Language_based_assessment_data_3_100
-    - DP_projections_HILS_SWLS_100
-    - centrality_data_harmony
-    - PC_projections_satisfactionwords_40
+    - talk_data
 
 
 articles:
@@ -133,23 +56,11 @@ articles:
   navbar: ~
   contents:
   - LBAM
-  - huggingface_in_r_extended_installation_guide
-  - singularity_transformers_container
-  - huggingface_in_r_and_computer_capacity
-  - removing_huggingface_transformers_cache_files
 - title: Tutorials
   desc: >
     These tutorials go into detail about various text-analyses.
   contents:
-  - huggingface_in_r
-  - psychological_methods
-  - lbam_tutorial
-  - implicit_motives_tutorial
-- title: Comments
-  desc: >
-    General comments about text-analyses.
-  contents:
-  - pre_registration_and_transformers
+  - talk_huggingface_in_r_extended_installation_guide
 
 news:
    one_page: true

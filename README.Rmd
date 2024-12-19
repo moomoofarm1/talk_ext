@@ -142,38 +142,7 @@ embeddings
 ```
 See [Get Started](https://www.r-text.org/articles/text.html) for more information. 
 
-### Language Analysis Tasks
-It is also possible to access many language analysis tasks such as textClassify(), textGeneration(), and textTranslate().
 
-```{r language_analysis_task_examples, eval = evaluate, warning=FALSE, message=FALSE}
-library(text)
-
-# Generate text from the prompt "I am happy to"
-generated_text <- textGeneration("I am happy to",
-                                 model = "gpt2")
-generated_text
-```
-
-For a full list of language analysis tasks supported in text see the [References](https://www.r-text.org/reference/index.html)
-
-### An end-to-end package
-*Text* also provides functions to analyse the word embeddings with well-tested machine learning algorithms and statistics. The focus is to analyze and visualize text, and their relation to other text or numerical variables. For example, the `textTrain()` function is used to examine how well the word embeddings from a text can predict a numeric or categorical variable. Another example is functions plotting statistically significant words in the word embedding space.   
-
-```{r DPP_plot, message=FALSE, warning=FALSE}
-library(text) 
-# Use data (DP_projections_HILS_SWLS_100) that have been pre-processed with the textProjectionData function; the preprocessed test-data included in the package is called: DP_projections_HILS_SWLS_100
-plot_projection <- textProjectionPlot(
-  word_data = DP_projections_HILS_SWLS_100,
-  y_axes = TRUE,
-  title_top = " Supervised Bicentroid Projection of Harmony in life words",
-  x_axes_label = "Low vs. High HILS score",
-  y_axes_label = "Low vs. High SWLS score",
-  position_jitter_hight = 0.5,
-  position_jitter_width = 0.8
-)
-plot_projection$final_plot
-
-```
 
 <a rel="me" href="https://mastodon.online/@oscarkjell">M</a>
 <link rel="me" href="https://mastodon.online/@oscarkjell" M />
