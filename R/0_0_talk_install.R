@@ -59,11 +59,13 @@ talkrpp_install <- function(conda = "auto",
       rpp_version <- c(
         # talk
         "argparse",
-        "torch==2.2.0",
-        "transformers==4.38.0",
-        "pandas==2.0.3",
+        "torch", #==2.2.0",
+        "transformers", #==4.38.0",
+        "pandas", #==2.0.3",
         "tqdm",
-        "numpy<2"
+        "numpy",
+        "torchaudio",
+        "matplotlib"
 
         # text
 #        "huggingface_hub==0.20.0",
