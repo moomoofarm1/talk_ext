@@ -1,6 +1,6 @@
 # Paths in python to task_finetune is set in R function
-from task_finetune import main as task_finetuner
-from run_mlm import main as mlm_finetuner
+# from task_finetune import main as task_finetuner
+# from run_mlm import main as mlm_finetuner
 import json
 import os, sys
 import torch
@@ -439,3 +439,21 @@ def preprocess_audio(audio_path):
 def mean_pooling(embeddings, attention_mask):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(embeddings.size()).float()
     return torch.sum(embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+
+
+# MAIN FOR TESTING PURPOSES
+if __name__ == '__main__':
+    embs = hgTransformerGetEmbedding(
+        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
+        use_decoder = False,
+        tokenizer_parallelism = False,
+        model_max_length = None,
+        device = 'cuda',
+        hg_gated = False,
+        hg_token = "",
+        trust_remote_code = False,
+        logging_level = 'warning',
+    )
+
+    print(embs[0].shape)
