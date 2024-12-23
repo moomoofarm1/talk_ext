@@ -58,17 +58,22 @@ talkrpp_install <- function(conda = "auto",
     if (is_osx() || is_linux()) {
       rpp_version <- c(
         # talk
-        "argparse",
-        "torch", #==2.2.0",
+  #      "torch==2.2.0",
+        "torchaudio==2.4.1",
         "transformers", #==4.38.0",
-        "pandas", #==2.0.3",
+        "huggingface_hub==0.20.0",
+
+  #      "torch==2.2.1",
+  #      "torchaudio==2.2.1",
+        "torchvision", #==0.17.1",
+        "argparse",
+        "pandas",
         "tqdm",
-        "numpy",
-        "torchaudio",
-        "matplotlib"
+        "numpy<2",
+        "matplotlib",
+        "ffmpeg-python"
 
         # text
-#        "huggingface_hub==0.20.0",
 #        "numpy==1.26.0",
 #        "nltk==3.8.1",
 #        "scikit-learn==1.3.0", # higher versions 1.4 and 1.5 yield errors in talkTopics() and warnings in talkTrain
