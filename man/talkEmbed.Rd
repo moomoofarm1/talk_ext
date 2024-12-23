@@ -4,12 +4,45 @@
 \alias{talkEmbed}
 \title{Transform audio recordings to embeddings}
 \usage{
-talkEmbed(talk, model = "WhiSPA")
+talkEmbed(
+  talk_filepaths,
+  model = "whisper-tiny",
+  layers = "all",
+  return_tokens = TRUE,
+  device = "cpu",
+  tokenizer_parallelism = FALSE,
+  model_max_length = None,
+  hg_gated = FALSE,
+  hg_token = "",
+  trust_remote_code = FALSE,
+  logging_level = "warning",
+  sentence_tokenize = TRUE
+)
 }
 \arguments{
-\item{talk}{(audio file) .}
+\item{talk_filepaths}{(string) Path to a video file (.wav/) list of audio filepaths, each is embedded separately}
 
 \item{model}{(character) Path or name of the model to use for embedding the audio data.}
+
+\item{layers}{(string or list)  'all' or an integer list of layers to keep}
+
+\item{return_tokens}{add}
+
+\item{device}{add}
+
+\item{tokenizer_parallelism}{add}
+
+\item{model_max_length}{add}
+
+\item{hg_gated}{(boolean) Set to True if the model is gated}
+
+\item{hg_token}{(string) The token to access the gated model got in huggingface website}
+
+\item{trust_remote_code}{add}
+
+\item{logging_level}{add}
+
+\item{sentence_tokenize}{add}
 }
 \value{
 A tibble with embeddings.
