@@ -1,2 +1,4 @@
 "torch==2.2.0",
-"transformers==4.38.0"
+"torchaudio==2.4.1",
+"transformers==4.38.0",
+"huggingface_hub==0.20.0",
