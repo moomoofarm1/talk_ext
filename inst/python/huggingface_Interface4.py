@@ -153,7 +153,7 @@ def set_tokenizer_parallelism(tokenizer_parallelism):
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 
-def get_audio_model(model, processor_only=False, config_only=False, hg_gated=False, hg_token="", trust_remote_code=False):
+def get_audio_model(model, processor_only=False, config_only=False, hg_gated=False, hg_token="", trust_remote_code=False, for_transcription=False):
     """
     Get audio model and tokenizer from model string
 
@@ -180,7 +180,11 @@ def get_audio_model(model, processor_only=False, config_only=False, hg_gated=Fal
     config = AutoConfig.from_pretrained(model)
     if not config_only:
         processor = AutoProcessor.from_pretrained(model)
-        transformer_model = AutoModel.from_pretrained(model, config=config, trust_remote_code=trust_remote_code)
+        if for_transcription:
+            from transformers import WhisperForConditionalGeneration
+            transformer_model = WhisperForConditionalGeneration.from_pretrained(model, config=config, trust_remote_code=trust_remote_code)
+        else:
+            transformer_model = AutoModel.from_pretrained(model, config=config, trust_remote_code=trust_remote_code)
             
     if config_only:
         return config
@@ -262,7 +266,6 @@ def hgTransformerTranscribe(
     model = 'whisper-tiny',
     device = 'cpu',
     tokenizer_parallelism = False,
-    model_max_length = None,
     hg_gated = False,
     hg_token = "",
     trust_remote_code = False,
@@ -282,8 +285,6 @@ def hgTransformerTranscribe(
         name of device: 'cpu', 'gpu', or 'gpu:k' where k is a specific device number
     tokenizer_parallelism :  bool
         Whether to use device parallelization during tokenization
-    model_max_length : int
-        maximum length of the tokenized text
     hg_gated : bool
         Whether the accessed model is gated
     hg_token: str
@@ -295,14 +296,47 @@ def hgTransformerTranscribe(
 
     Returns
     -------
-    all_embs : list
-        embeddings for each item in text_strings
-    all_toks : list, optional
-        tokenized version of text_strings
+    all_transcripts : list, optional
+        text
     """
     set_logging_level(logging_level)
     set_tokenizer_parallelism(tokenizer_parallelism)
-    pass
+    device, device_num = get_device(device)
+
+    if not isinstance(audio_filepaths, list):
+        audio_filepaths = [audio_filepaths]
+    
+    config, processor, transformer_model = get_audio_model(model, hg_gated=hg_gated, hg_token=hg_token, trust_remote_code=trust_remote_code, for_transcription=True)
+
+    if device != 'cpu':
+        transformer_model.to(device)
+    transformer_model.eval()
+
+    all_transcripts = []
+
+    for audio_filepath in audio_filepaths:
+        waveform = preprocess_audio(audio_filepath)
+        audio_inputs = processor(waveform.squeeze(), sampling_rate=16000, return_tensors="pt")
+        
+        if device != 'cpu':
+            audio_inputs = audio_inputs.to(device)
+
+        try:
+            with torch.no_grad():
+                # Generate transcription
+                generated_ids = transformer_model.generate(**audio_inputs)
+
+            # Decode transcription
+            transcript = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+
+            all_transcripts.append(transcript)
+        except Exception as e:
+            print(f'\"{audio_filepath}\" failed with the following error:')
+            print(Warning(e))
+    
+    if hg_gated:
+        del_hg_gated_access()
+    return all_transcripts
 
 
 def hgTransformerGetEmbedding(
@@ -375,7 +409,6 @@ def hgTransformerGetEmbedding(
     transformer_model.eval()
 
     all_embs = []
-    all_toks = []
 
     for i, audio_filepath in enumerate(audio_filepaths):
         waveform = preprocess_audio(audio_filepath)
@@ -436,9 +469,9 @@ def preprocess_audio(audio_path):
     return waveform
 
 
-def mean_pooling(embeddings, attention_mask):
-    input_mask_expanded = attention_mask.unsqueeze(-1).expand(embeddings.size()).float()
-    return torch.sum(embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+# def mean_pooling(embeddings, attention_mask):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(embeddings.size()).float()
+#     return torch.sum(embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
 
 # MAIN FOR TESTING PURPOSES
@@ -449,7 +482,7 @@ if __name__ == '__main__':
         use_decoder = False,
         tokenizer_parallelism = False,
         model_max_length = None,
-        device = 'cuda',
+        device = 'cpu',
         hg_gated = False,
         hg_token = "",
         trust_remote_code = False,
@@ -457,3 +490,16 @@ if __name__ == '__main__':
     )
 
     print(embs[0].shape)
+
+    transcripts = hgTransformerTranscribe(
+        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
+        tokenizer_parallelism = False,
+        device = 'cpu',
+        hg_gated = False,
+        hg_token = "",
+        trust_remote_code = False,
+        logging_level = 'warning',
+    )
+
+    print(transcripts[0])
