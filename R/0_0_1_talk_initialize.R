@@ -55,7 +55,7 @@ talkrpp_initialize <- function(python_executable = NULL,
 
   # Importing this here may start importing necessary packages
   reticulate::source_python(system.file("python",
-    "AudioEmbeddings.py",
+    "huggingface_Interface4.py",
     package = "talk",
     mustWork = TRUE
   ))

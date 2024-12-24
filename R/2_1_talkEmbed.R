@@ -42,7 +42,7 @@ talkEmbed <- function(
 
 
   reticulate::source_python(system.file("python",
-                                        "AudioEmbeddings.py",
+                                        "huggingface_Interface4.py",
                                         package = "talk",
                                         mustWork = TRUE
   ))
