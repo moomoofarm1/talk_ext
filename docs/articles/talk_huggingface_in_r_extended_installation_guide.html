@@ -71,15 +71,15 @@
 
     
     
-<p><em>Text</em> enables users access to HuggingFace Transformers in R
+<p><em>Talk</em> enables users access to HuggingFace Transformers in R
 through the R-package <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> as an
 interface to <a href="https://www.python.org/" class="external-link">Python</a>, and the
 python packages <a href="https://pytorch.org/" class="external-link">torch</a> and <a href="https://huggingface.co/docs/transformers/index" class="external-link">transformers</a>.
-So it’s important to install both the text-package and a python
-environment with the text required python packages that the text-package
+So it’s important to install both the talk-package and a python
+environment with the talk required python packages that the talk-package
 can use.  The recommended way is to use
-<code><a href="https://r-text.org/reference/textrpp_install.html" class="external-link">textrpp_install()</a></code> to install a conda environment with text
-required python packages, and <code>textrpp_initialize</code> to
+<code><a href="../reference/talkrpp_install.html">talkrpp_install()</a></code> to install a mini conda environment with
+talk required python packages, and <code>talkrpp_initialize</code> to
 initialize it.</p>
 <div class="section level2">
 <h2 id="conda-environment">Conda environment<a class="anchor" aria-label="anchor" href="#conda-environment"></a>
@@ -95,7 +95,7 @@ initialize it.</p>
 <span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/conda-tools.html" class="external-link">conda_list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Initialize the installed conda environment.</span></span>
-<span><span class="co"># save_profile = TRUE saves the settings so that you don't have to run textrpp_initialize() after restarting R. </span></span>
+<span><span class="co"># save_profile = TRUE saves the settings so that you don't have to run talkrpp_initialize() after restarting R. </span></span>
 <span><span class="fu">text</span><span class="fu">::</span><span class="fu">talkrpp_initialize</span><span class="op">(</span>save_profile <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Test so that the text package work.</span></span>

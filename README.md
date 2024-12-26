@@ -28,8 +28,6 @@ hypotheses in social and behavior sciences for both relatively small and
 large datasets. *talk* is continuously tested on Ubuntu, Mac OS and
 Windows using the latest stable R version.
 
-Please reference .
-
 ### Short installation guide
 
 Most users simply need to run below installation code. For those

@@ -33,6 +33,7 @@ Suggests:
     knitr,
     xml2,
     rmarkdown,
-    testthat
+    testthat,
+    covr
 VignetteBuilder: knitr
 Depends: R (>= 4.00)
