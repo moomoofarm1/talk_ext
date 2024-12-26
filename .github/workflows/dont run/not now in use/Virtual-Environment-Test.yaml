@@ -80,45 +80,45 @@ jobs:
         shell: Rscript {0}
 
 
-      - name: MAC - Installing text and testing it
+      - name: MAC - Installing talk and testing it
         if: runner.os == 'macOS'
         run:  |
           install.packages("devtools")
           library(devtools)
-          devtools::install_github("oscarkjell/text")
-          library(text)
-          text::textrpp_install_virtualenv(envname = "textrpp_virtualenv", python_path = "/usr/local/bin/python3.9", prompt = FALSE)
-          text::textrpp_initialize(virtualenv = "textrpp_virtualenv", refresh_settings = TRUE)
-          text::textEmbed("hello")
+          devtools::install_github("oscarkjell/talk")
+          library(talk)
+          talk::talkrpp_install_virtualenv(envname = "talkrpp_virtualenv", python_path = "/usr/local/bin/python3.9", prompt = FALSE)
+          talk::talkrpp_initialize(virtualenv = "talkrpp_virtualenv", refresh_settings = TRUE)
+          talk::talkEmbed("hello")
         shell: Rscript {0}
 
-      - name: UBUNTU - Installing text and testing it
+      - name: UBUNTU - Installing talk and testing it
         if: runner.os == 'Linux'
         run:  |
           install.packages("devtools")
           library(devtools)
-          devtools::install_github("oscarkjell/text")
-          library(text)
-          text::textrpp_install_virtualenv(envname = "textrpp_virtualenv", python_path = "/usr/bin/python3", prompt = FALSE)
-          text::textrpp_initialize(virtualenv = "textrpp_virtualenv", refresh_settings = TRUE)
-          text::textEmbed("hello")
+          devtools::install_github("oscarkjell/talk")
+          library(talk)
+          talk::talkrpp_install_virtualenv(envname = "talkrpp_virtualenv", python_path = "/usr/bin/python3", prompt = FALSE)
+          talk::talkrpp_initialize(virtualenv = "talkrpp_virtualenv", refresh_settings = TRUE)
+          talk::talkEmbed("hello")
         shell: Rscript {0}
 
 
-      - name: WINDOWS - Installing text and testing it
+      - name: WINDOWS - Installing talk and testing it
         if: runner.os == 'Windows'
         run:  |
           Sys.setenv(RETICULATE_PYTHON = "C:\\hostedtoolcache\\windows\\Python\\3.9.0\\x64")
           library(reticulate)
-          reticulate::virtualenv_create("text_virtualenv", required = TRUE)
-          reticulate::use_virtualenv("text_virtualenv", required = TRUE)
-          reticulate::py_install("nltk", envname = "text_virtualenv")
-          reticulate::py_install('transformers==4.12.5', envname = "text_virtualenv")
-          reticulate::py_install('torch==1.7.1', envname = "text_virtualenv")
-          reticulate::py_install("numpy", envname = "text_virtualenv")
+          reticulate::virtualenv_create("talk_virtualenv", required = TRUE)
+          reticulate::use_virtualenv("talk_virtualenv", required = TRUE)
+          reticulate::py_install("nltk", envname = "talk_virtualenv")
+          reticulate::py_install('transformers==4.12.5', envname = "talk_virtualenv")
+          reticulate::py_install('torch==1.7.1', envname = "talk_virtualenv")
+          reticulate::py_install("numpy", envname = "talk_virtualenv")
           reticulate::py_config()
-          library(text)
-          text::textEmbed("hello")
+          library(talk)
+          talk::talkEmbed("hello")
         shell: Rscript {0}
 
       - name: Session info

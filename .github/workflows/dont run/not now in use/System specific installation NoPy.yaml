@@ -89,13 +89,13 @@ jobs:
         if: runner.os == 'macOS'
         run: sudo chown -R $UID $CONDA
 
-      - name: Installing text and testing it
+      - name: Installing talk and testing it
         run:  |
           install.packages("devtools")
           library(devtools)
-          devtools::install_github("oscarkjell/text")
-          text::textrpp_install(prompt = FALSE)
-          text::textrpp_initialize(textEmbed_test = TRUE)
+          devtools::install_github("oscarkjell/talk")
+          talk::talkrpp_install(prompt = FALSE)
+          talk::talkrpp_initialize(talkEmbed_test = TRUE)
         shell: Rscript {0}
 
 

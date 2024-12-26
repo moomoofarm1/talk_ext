@@ -3,8 +3,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ## talk 0.2
-- Adding `talkEmbed()`, `talkEmbed()`
-
+- adding `talkEmbed()`, `talkEmbed()`
+- adding github actions and tests.  
 
 
 
