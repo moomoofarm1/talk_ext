@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   talk_huggingface_in_r_extended_installation_guide: talk_huggingface_in_r_extended_installation_guide.html
   talk: talk.html
-last_built: 2024-12-19T05:39Z
+last_built: 2024-12-26T17:22Z
 urls:
   reference: https://r-talk.org/reference
   article: https://r-talk.org/articles

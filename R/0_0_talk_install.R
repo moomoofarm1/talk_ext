@@ -58,18 +58,17 @@ talkrpp_install <- function(conda = "auto",
     if (is_osx() || is_linux()) {
       rpp_version <- c(
         # talk
-  #      "torch==2.2.0",
-        "torchaudio==2.4.1",
-        "transformers", #==4.38.0",
+        "numpy==1.26.0",
+        "torch==2.2.0",
+        "torchaudio==2.2.0",
+        "librosa==0.10.2",
+        "soundfile==0.12.1",
+        "transformers==4.38.0",
         "huggingface_hub==0.20.0",
 
-  #      "torch==2.2.1",
-  #      "torchaudio==2.2.1",
-        "torchvision", #==0.17.1",
         "argparse",
         "pandas",
         "tqdm",
-        "numpy<2",
         "matplotlib",
         "ffmpeg-python"
 

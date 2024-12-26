@@ -1,7 +1,7 @@
 Package: talk
 Type: Package
 Title: Analyses of audio recordings using transformers models
-Version: 0.01.1
+Version: 0.02
 Authors@R: c(
     person("Oscar", "Kjell", , "oscar.kjell@psy.lu.se", role = c("aut", "cre"), 
       comment = c(ORCID = "0000-0002-2728-6278"),
@@ -16,20 +16,22 @@ Authors@R: c(
       comment = c(ORCID = "0000-0000-0000-0000")
     )
     )
-Description: Link R with Transformers from Hugging Face to transform text variables to word embeddings; where the word embeddings are used to statistically test the mean difference between set of texts, compute semantic similarity scores between texts, predict numerical variables, and visual statistically significant words according to various dimensions etc. For more information see  <https://www.r-text.org>.
+Description: Link R with Transformers from Hugging Face to transform audio recordings to text or audio embeddings. For more information see  <https://www.r-talk.org>.
 License: GPL-3
-URL: https://r-text.org/, https://github.com/OscarKjell/text/
-BugReports: https://github.com/OscarKjell/text/issues/
+URL: https://r-talk.org/, https://github.com/theharmonylab/talk
+BugReports: https://github.com/theharmonylab/talk
 Encoding: UTF-8
 Archs: x64
 SystemRequirements: Python (>= 3.6.0)
 LazyData: true
 BuildVignettes: true
 Imports:
-    reticulate
+    reticulate, 
+    tibble
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
+    xml2,
     rmarkdown,
     testthat
 VignetteBuilder: knitr

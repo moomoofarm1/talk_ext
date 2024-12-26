@@ -1,19 +1,20 @@
-
 url: https://r-talk.org
 
 development:
 #  mode: release
 #   mode: auto
-   mode: default
+  mode: default
 #   mode: unreleased
+
 home:
   title: talk
   description: Analyses of talk in audio recordings using transformers models such as Whisper from HuggingFace.
   links:
-  - text: Ask a question about talk using the r-talk tag
-    href: https://stackoverflow.com/
+    - text: Ask a question about talk using the r-talk tag
+      href: https://stackoverflow.com/
 
 template:
+  bootstrap: 5
   opengraph:
     image:
       src: man/figures/logo.png
@@ -26,42 +27,38 @@ template:
 authors:
   Oscar Kjell:
     href: https://oscarkjell.se/
-  Salvatore Giorgi:
-    href: http://www.salvatoregiorgi.com/
-  Andrew Schwartz:
-    href: https://www3.cs.stonybrook.edu/~has/
+  Rajath Rao:
+    href: https://github.com/Jarhatz
 
 twitter:
   icon: "fab fa-twitter fa-lg"
   href: http://twitter.com/OscarKjell
 
 reference:
-- title: Installation
-  contents:
-  - talkrpp_install
-  - talkrpp_install_virtualenv
-  - talkrpp_uninstall
-  - talkrpp_initialize
-- title: Transform talk to word embeddings
-  contents:
-  - talkText
-  - textEmbed
-- title: Example Data
-  contents:
-    - talk_data
+  - title: Installation
+    contents:
+      - talkrpp_install
+      - talkrpp_install_virtualenv
+      - talkrpp_uninstall
+      - talkrpp_initialize
+  - title: Transform talk to word embeddings
+    contents:
+      - talkText
+      - talkEmbed
+#  - title: Example Data
+#    contents:
+#      - talk_data
 
-
-articles:
-- title: Set-up
-  navbar: ~
-  contents:
-  - LBAM
-- title: Tutorials
-  desc: >
-    These tutorials go into detail about various text-analyses.
-  contents:
-  - talk_huggingface_in_r_extended_installation_guide
+#articles:
+#  - title: Set-up
+#    navbar: ~
+#    contents:
+#  - title: Tutorials
+#    desc: >
+#      These tutorials go into detail about various talk-analyses.
+#    contents:
+#      - talk_huggingface_in_r_extended_installation_guide
 
 news:
-   one_page: true
-   cran_dates: true
+  one_page: true
+  cran_dates: true

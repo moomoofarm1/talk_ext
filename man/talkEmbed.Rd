@@ -6,43 +6,42 @@
 \usage{
 talkEmbed(
   talk_filepaths,
-  model = "whisper-tiny",
-  layers = "all",
-  return_tokens = TRUE,
-  device = "cpu",
+  model = "openai/whisper-small",
+  audio_transcriptions = "None",
+  use_decoder = FALSE,
   tokenizer_parallelism = FALSE,
-  model_max_length = None,
+  model_max_length = "None",
+  device = "cpu",
   hg_gated = FALSE,
   hg_token = "",
   trust_remote_code = FALSE,
-  logging_level = "warning",
-  sentence_tokenize = TRUE
+  logging_level = "warning"
 )
 }
 \arguments{
-\item{talk_filepaths}{(string) Path to a video file (.wav/) list of audio filepaths, each is embedded separately}
+\item{talk_filepaths}{(string) path to a video file (.wav/) list of audio filepaths, each is embedded separately}
 
-\item{model}{(character) Path or name of the model to use for embedding the audio data.}
+\item{model}{shortcut name for Hugging Face pretained model. Full list https://huggingface.co/transformers/pretrained_models.html}
 
-\item{layers}{(string or list)  'all' or an integer list of layers to keep}
+\item{audio_transcriptions}{(strings) audio_transcriptions : list
+(optional) list of audio transcriptions, to be used for Whisper's decoder-based embeddings}
 
-\item{return_tokens}{add}
+\item{use_decoder}{(boolean) whether to use Whisper's decoder last hidden state representation
+(Note: audio_transcriptions must be provided if this option is set to true)}
 
-\item{device}{add}
+\item{tokenizer_parallelism}{(boolean) whether to use device parallelization during tokenization.}
 
-\item{tokenizer_parallelism}{add}
+\item{model_max_length}{(integer) maximum length of the tokenized text}
 
-\item{model_max_length}{add}
+\item{device}{(string) name of device: 'cpu', 'gpu', or 'gpu:k' where k is a specific device number}
 
-\item{hg_gated}{(boolean) Set to True if the model is gated}
+\item{hg_gated}{(boolean) set to True if the model is gated}
 
-\item{hg_token}{(string) The token to access the gated model got in huggingface website}
+\item{hg_token}{(string) the token to access the gated model got in huggingface website}
 
-\item{trust_remote_code}{add}
+\item{trust_remote_code}{(boolean) use a model with custom code on the Huggingface Hub.}
 
-\item{logging_level}{add}
-
-\item{sentence_tokenize}{add}
+\item{logging_level}{(string) Set logging level, options: "critical", "error", "warning", "info", "debug".}
 }
 \value{
 A tibble with embeddings.

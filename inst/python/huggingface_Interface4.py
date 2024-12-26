@@ -447,7 +447,8 @@ def hgTransformerGetEmbedding(
                 else:
                     raise AssertionError('Not implemented yet...')
 
-            all_embs.append(embedding)
+#            all_embs.append(embedding)
+            all_embs.append(embedding.numpy().tolist())
         except Exception as e:
             print(f'\"{audio_filepath}\" failed with the following error:')
             print(Warning(e))
@@ -474,32 +475,32 @@ def preprocess_audio(audio_path):
 #     return torch.sum(embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
 
-# MAIN FOR TESTING PURPOSES
-if __name__ == '__main__':
-    embs = hgTransformerGetEmbedding(
-        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
-        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
-        use_decoder = False,
-        tokenizer_parallelism = False,
-        model_max_length = None,
-        device = 'cpu',
-        hg_gated = False,
-        hg_token = "",
-        trust_remote_code = False,
-        logging_level = 'warning',
-    )
-
-    print(embs[0].shape)
-
-    transcripts = hgTransformerTranscribe(
-        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
-        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
-        tokenizer_parallelism = False,
-        device = 'cpu',
-        hg_gated = False,
-        hg_token = "",
-        trust_remote_code = False,
-        logging_level = 'warning',
-    )
-
-    print(transcripts[0])
+## MAIN FOR TESTING PURPOSES
+#if __name__ == '__main__':
+#    embs = hgTransformerGetEmbedding(
+#        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+#        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
+#        use_decoder = False,
+#        tokenizer_parallelism = False,
+#        model_max_length = None,
+#        device = 'cpu',
+#        hg_gated = False,
+#        hg_token = "",
+#        trust_remote_code = False,
+#        logging_level = 'warning',
+#    )
+#
+#    print(embs[0].shape)
+#
+#    transcripts = hgTransformerTranscribe(
+#        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+#        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
+#        tokenizer_parallelism = False,
+#        device = 'cpu',
+#        hg_gated = False,
+#        hg_token = "",
+#        trust_remote_code = False,
+#        logging_level = 'warning',
+#    )
+#
+#    print(transcripts[0])

@@ -83,7 +83,14 @@ talkrpp_initialize <- function(python_executable = NULL,
   }
 
   if (talkEmbed_test == TRUE) {
-    talkEmbed("hello")
+
+    wav_path <- system.file("extdata/",
+                            "test_short.wav",
+                            package = "talk")
+
+    talkEmbed(
+      talk_filepaths = wav_path
+    )
   }
 }
 

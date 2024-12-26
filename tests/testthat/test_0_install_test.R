@@ -1,5 +1,5 @@
 library(testthat)
-library(text)
+library(talk)
 
 test_that("installing text", {
   skip_on_cran()
@@ -7,32 +7,49 @@ test_that("installing text", {
   # On Linux get error at reticulate:::pip_install(...)
 
   if (Sys.info()["sysname"] == "Darwin" | Sys.info()["sysname"] == "Windows") {
-    text::textrpp_install(prompt = FALSE,
-                          envname = "test_ok"
+    talk::talkrpp_install(prompt = FALSE,
+                          envname = "talk_test"
                           )
 
-    text::textrpp_initialize(textEmbed_test = TRUE,
-                             save_profile = TRUE,
+    talk::talkrpp_initialize(talkEmbed_test = TRUE,
+                             save_profile = FALSE,
                              prompt = FALSE,
-                             condaenv = "test_ok"
+                             condaenv = "talk_test"
                              )
 
-    text_test <- text::textEmbed("hello")
+    wav_path <- system.file("extdata/",
+                            "test_short.wav",
+                            package = "talk")
+    wav_path
 
-    expect_equal(text_test$tokens$texts[[1]]$Dim1[[1]], -0.9554495, tolerance = 0.0001)
+    emb_test <- talk::talkEmbed(
+      talk_filepaths = wav_path
+    )
+
+    testthat::expect_equal(emb_test$Dim1,
+                 .0961972, tolerance = 0.0001)
+    testthat::expect_equal(emb_test$Dim2,
+                 0.2104149, tolerance = 0.0001)
+    testthat::expect_equal(emb_test$Dim3,
+                 -0.02505045, tolerance = 0.0001)
   }
 
+  text_test <- talk::talkText(
+    talk_filepaths = wav_path
+  )
+
+  testthat::expect_equal(text_test[1],
+                         " Hello.")
+
 #    INSTEAD SEE HOW IT IS BEING UNINSTALLED IN TEXT_ZZ... file
-#    if (Sys.info()["sysname"] == "Darwin" | Sys.info()["sysname"] == "Windows") {
-#
+    if (Sys.info()["sysname"] == "Darwin" | Sys.info()["sysname"] == "Windows") {
+
 #    # help(textrpp_uninstall)
 #    text::textrpp_install(prompt = FALSE,
 #                          envname = "uninstall")
-#
-#    textrpp_uninstall(prompt = FALSE,
-#                      envname = "uninstall")
-#  }
 
+    talkrpp_uninstall(prompt = FALSE,
+                      envname = "talk_test")
+  }
 
-#
 })

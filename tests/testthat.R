@@ -1,12 +1,7 @@
 library(testthat)
 library(text)
 
-test_check("text")
-
-
-# The submission to CRAN has been rejected several times because the
-# time to check the package is too long (>10 min). Thus,  we'll avoid running all tests on
-# CRAN.
+test_check("talk")
 
 if (identical(Sys.getenv("NOT_CRAN"), "true")) { # emulates `testthat:::on_cran()`
   if (requireNamespace("xml2")) {
@@ -17,6 +12,6 @@ if (identical(Sys.getenv("NOT_CRAN"), "true")) { # emulates `testthat:::on_cran(
       ))
     )
   } else {
-    test_check("text")
+    test_check("talk")
   }
 }
