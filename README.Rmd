@@ -21,9 +21,8 @@ evaluate <- FALSE
 
 <!-- badges: start -->
 
-[![Github build status](https://github.com/oscarkjell/talk/workflows/R-CMD-check/badge.svg)](https://github.com/oscarkjell/talk/actions)
-[![Project Status: Active – The project has reached an experimental, usable state and is being actively developed](https://www.repostatus.org/badges/latest/experimental.svg)](https://www.repostatus.org/#active)
-[![codecov](https://codecov.io/gh/oscarkjell/talk/branch/master/graph/badge.svg?)](https://app.codecov.io/gh/oscarkjell/talk)
+[![Github build status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](https://github.com/theharmonylab/talk/actions)
+[![codecov](https://codecov.io/gh/theharmonylab/talk/branch/main/graph/badge.svg?)](https://app.codecov.io/gh/theharmonylab/talk)
 
 <!--
 [![CRAN Status](https://www.r-pkg.org/badges/version/talk)](https://CRAN.R-project.org/package=talk)
@@ -55,7 +54,7 @@ For the talk-package to work, you first have to install the talk-package in R, a
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("oscarkjell/talk")
+devtools::install_github("theharmonylab/talk")
 ```
 
 [CRAN](https://CRAN.R-project.org/package=talk) version:

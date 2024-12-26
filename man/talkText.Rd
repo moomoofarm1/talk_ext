@@ -42,9 +42,15 @@ Transform audio recordings to embeddings
 # Transform audio recordings in text:
 # voice_data (included in talk-package), to embeddings.
 \dontrun{
-
+wav_path <- system.file("extdata/",
+"test_short.wav",
+package = "talk")
+# Get transcription
+talk_embeddings <- talkText(
+wav_path
+)
+talk_embeddings
 }
-
 }
 \seealso{
 \code{\link{talkText}}.

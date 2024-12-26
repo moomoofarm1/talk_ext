@@ -1,7 +1,7 @@
 library(testthat)
 library(talk)
 
-test_that("installing text", {
+test_that("installing talk", {
   skip_on_cran()
 
   # On Linux get error at reticulate:::pip_install(...)

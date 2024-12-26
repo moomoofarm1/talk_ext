@@ -478,7 +478,7 @@ def preprocess_audio(audio_path):
 ## MAIN FOR TESTING PURPOSES
 #if __name__ == '__main__':
 #    embs = hgTransformerGetEmbedding(
-#        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+#        audio_filepaths = '',
 #        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
 #        use_decoder = False,
 #        tokenizer_parallelism = False,
@@ -493,7 +493,7 @@ def preprocess_audio(audio_path):
 #    print(embs[0].shape)
 #
 #    transcripts = hgTransformerTranscribe(
-#        audio_filepaths = '/cronus_data/rrao/samples/P443_12222023_PM_8954.mp3',
+#        audio_filepaths = '',
 #        model = 'openai/whisper-tiny', # facebook/wav2vec2-base-960h
 #        tokenizer_parallelism = False,
 #        device = 'cpu',

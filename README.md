@@ -5,17 +5,15 @@
 
 <!-- badges: start -->
 
-[![Github build status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](https://github.com/theharmonylab/talk/actions)
-[![codecov](https://codecov.io/gh/oscarkjell/talk/branch/master/graph/badge.svg?)](https://app.codecov.io/gh/oscarkjell/talk)
+[![Github build
+status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](https://github.com/theharmonylab/talk/actions)
+[![codecov](https://codecov.io/gh/theharmonylab/talk/branch/main/graph/badge.svg?)](https://app.codecov.io/gh/theharmonylab/talk)
 
 <!--
-
-[![CRAN Status](https://www.r-pkg.org/badges/version/text)](https://CRAN.R-project.org/package=text)
-[![Github build status](https://github.com/oscarkjell/text/workflows/R-CMD-check/badge.svg)](https://github.com/oscarkjell/text/actions)
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing-1)
-[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/text)](https://CRAN.R-project.org/package=text)
-[![codecov](https://codecov.io/gh/oscarkjell/text/branch/master/graph/badge.svg?)](https://app.codecov.io/gh/oscarkjell/text)-->
+[![CRAN Status](https://www.r-pkg.org/badges/version/talk)](https://CRAN.R-project.org/package=talk)
+&#10;[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing-1)
+&#10;[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/talk)](https://CRAN.R-project.org/package=talk)
+&#10;-->
 <!-- badges: end -->
 
 An R-package for analyzing natural language with transformers from
@@ -82,21 +80,20 @@ accessible through an interface to
 See [HuggingFace](https://huggingface.co/models/) for a more
 comprehensive list of models.
 
-The `talkText()` function is the main function in `talk`; it performs
-speech-to-text, transcribing audio input. talkEmbed, transforms audio
-input to numeric representaions (embeddings) that can be used for
-downstream tasks such as buidline predictive models using the
-`text```-package (see the text train functions).
+The `talkText()` function performs speech-to-text, transcribing audio
+input to text. \`talkEmbed()\`\`\`, transforms audio input to numeric
+representaions (embeddings) that can be used for downstream tasks such
+as guideline predictive models using the text-pacakge (see the text
+train functions).
 
 ``` r
 library(talk)
 # Transform the talk data to BERT word embeddings
 
-# Example talk from the package example data
+# Get file path to example audio from the package example data
 wav_path <- system.file("extdata/",
                             "test_short.wav",
                             package = "talk")
-wav_path
 
 # Get transcription 
 talk_embeddings <- talkText(
