@@ -6,7 +6,7 @@ test_that("installing talk", {
 
   # On Linux get error at reticulate:::pip_install(...)
 
-  if (Sys.info()["sysname"] == "Darwin" | Sys.info()["sysname"] == "Windows") {
+#  if (Sys.info()["sysname"] == "Darwin" | Sys.info()["sysname"] == "Windows") {
     talk::talkrpp_install(prompt = FALSE,
                           envname = "talk_test"
                           )
@@ -32,7 +32,7 @@ test_that("installing talk", {
                  0.2104149, tolerance = 0.0001)
     testthat::expect_equal(emb_test$Dim3,
                  -0.02505045, tolerance = 0.0001)
-  }
+#  }
 
   text_test <- talk::talkText(
     talk_filepaths = wav_path
