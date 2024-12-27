@@ -31,27 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # macOS: Install system dependencies
-      - name: Install System Dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew install libxml2
-          brew install curl
-          brew install openssl
-
-      # Windows: Ensure Rtools is installed
-      - name: Install Rtools (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          choco install rtools
-
-      # Linux: Install system dependencies
-      - name: Install System Dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
       - uses: r-lib/actions/setup-r@v2-branch
         with:
           r-version: ${{ matrix.config.r }}
@@ -59,35 +38,30 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      # Install covr for code coverage
-      - name: Install covr Package
-        run: install.packages("covr", repos = "https://cloud.r-project.org")
+      - name: Install System Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install and Verify talk Package from GitHub
+        run: |
+          install.packages("devtools", repos = "https://cloud.r-project.org")
+          devtools::install_github("theharmonylab/talk")
+          library(talk)
         shell: Rscript {0}
 
-      # Verify covr installation
-      - name: Verify covr Installation
-        run: Rscript -e 'if (!requireNamespace("covr", quietly = TRUE)) stop("covr not installed")'
+      - name: Verify Installed Package Files
+        run: ls -R /Users/runner/work/talk/talk
 
-      - name: List Installed R Packages
-        run: Rscript -e 'installed.packages()[, "Package"]'
-
-      # Run code coverage
-      - name: Test Coverage
+      - name: Run Code Coverage
         env:
-          OMP_MAX_ACTIVE_LEVELS: 2
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
+        run: |
+          covr::codecov(
+            token = Sys.getenv("CODECOV_TOKEN")
+          )
         shell: Rscript {0}
 
       - name: List Files for Debugging
         run: ls -R
-
-      - name: Wait for Coverage Files to Be Ready
-        run: sleep 5
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ matrix.config.os }}
-          verbose: true
