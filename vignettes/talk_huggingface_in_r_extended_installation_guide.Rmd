@@ -1,0 +1,74 @@
+---
+title: "Extended Installation Guide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Extended Installation Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*Talk* enables users access to HuggingFace Transformers in R through the R-package [reticulate](https://rstudio.github.io/reticulate/) as an interface to [Python](https://www.python.org/), and the python packages [torch](https://pytorch.org/) and [transformers](https://huggingface.co/docs/transformers/index). So it's important to install both the talk-package and a python environment with the talk required python packages that the talk-package can use. </br></br> The recommended way is to use `talkrpp_install()` to install a mini conda environment with talk required python packages, and `talkrpp_initialize` to initialize it.
+
+## Conda environment
+
+```{r extended_installation_condaenv, eval = FALSE}
+library(talk)
+library(reticulate)
+
+# Install text required python packages in a conda environment (with defaults).
+text::talkrpp_install()
+
+# Show available conda environments.
+reticulate::conda_list()
+
+# Initialize the installed conda environment.
+# save_profile = TRUE saves the settings so that you don't have to run talkrpp_initialize() after restarting R. 
+text::talkrpp_initialize(save_profile = TRUE)
+
+# Test so that the text package work.
+wav_path <- system.file("extdata/",
+                        "test_short.wav",
+                        package = "talk")
+wav_path
+
+emb_test <- talk::talkEmbed(
+  talk_filepaths = wav_path
+)
+
+```
+
+
+## Solving OMP errors and R/Rstudio crashes
+Recently some text users (mainly on Mac), have experienced OMP errors - and that RStudio and R crashes. When this is happening we have found the following solutions for now:
+
+
+```         
+Sys.setenv(OMP_NUM_THREADS = "1") #Limit the number of threads to prevent conflicts.
+
+Sys.setenv(OMP_MAX_ACTIVE_LEVELS = "1") 
+
+# Also might have to restart R
+.rs.restartR()
+
+# If above does not work, you can also try this; although this solution might have some risks assocaited with it (for more information see https://github.com/dmlc/xgboost/issues/1715)
+Sys.setenv(KMP_DUPLICATE_LIB_OK = "TRUE") #Temporarily allows execution despite duplicate OpenMP libraries.
+
+### This is how you can unset the settings
+Sys.unsetenv("OMP_NUM_THREADS")
+Sys.unsetenv("OMP_MAX_ACTIVE_LEVELS")
+Sys.unsetenv("KMP_DUPLICATE_LIB_OK")
+
+# This is how you can verify the settings
+print(Sys.getenv("DYLD_LIBRARY_PATH"))
+
+
+# Please let us know if you find any other solutions. 
+```
+

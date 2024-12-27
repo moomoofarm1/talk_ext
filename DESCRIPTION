@@ -1,0 +1,39 @@
+Package: talk
+Type: Package
+Title: Analyses of audio recordings using transformers models
+Version: 0.02
+Authors@R: c(
+    person("Oscar", "Kjell", , "oscar.kjell@psy.lu.se", role = c("aut", "cre"), 
+      comment = c(ORCID = "0000-0002-2728-6278"),
+    ),
+    person("Adithya", "Ganesan", role = c("aut"), 
+      comment = c(ORCID = "0000-0000-0000-0000")
+    ),
+    person("Rajath", "Rao", role = c("aut"), 
+      comment = c(ORCID = "0000-0000-0000-0000")
+    ),
+    person("Akshay", "Raghavan", role = c("aut"), 
+      comment = c(ORCID = "0000-0000-0000-0000")
+    )
+    )
+Description: Link R with Transformers from Hugging Face to transform audio recordings to text or audio embeddings. For more information see  <https://www.r-talk.org>.
+License: GPL-3
+URL: https://r-talk.org/, https://github.com/theharmonylab/talk
+BugReports: https://github.com/theharmonylab/talk
+Encoding: UTF-8
+Archs: x64
+SystemRequirements: Python (>= 3.6.0)
+LazyData: true
+BuildVignettes: true
+Imports:
+    reticulate, 
+    tibble
+RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    xml2,
+    rmarkdown,
+    testthat,
+    covr
+VignetteBuilder: knitr
+Depends: R (>= 4.00)
