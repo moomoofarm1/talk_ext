@@ -89,7 +89,8 @@ talkrpp_initialize <- function(python_executable = NULL,
                             package = "talk")
 
     talkEmbed(
-      talk_filepaths = wav_path
+      talk_filepaths = wav_path,
+      model = "openai/whisper-tiny"
     )
   }
 }

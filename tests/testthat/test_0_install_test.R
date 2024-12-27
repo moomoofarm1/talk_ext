@@ -23,19 +23,21 @@ test_that("installing talk", {
     wav_path
 
     emb_test <- talk::talkEmbed(
-      talk_filepaths = wav_path
+      talk_filepaths = wav_path,
+      model = "openai/whisper-tiny"
     )
 
     testthat::expect_equal(emb_test$Dim1,
-                 .0961972, tolerance = 0.0001)
+                           -0.2030126, tolerance = 0.0001)
     testthat::expect_equal(emb_test$Dim2,
-                 0.2104149, tolerance = 0.0001)
+                           -1.008844, tolerance = 0.0001)
     testthat::expect_equal(emb_test$Dim3,
-                 -0.02505045, tolerance = 0.0001)
+                           0.897202, tolerance = 0.0001)
 #  }
 
   text_test <- talk::talkText(
-    talk_filepaths = wav_path
+    talk_filepaths = wav_path,
+    model = "openai/whisper-tiny"
   )
 
   testthat::expect_equal(text_test[1],
