@@ -38,27 +38,26 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      # System dependencies for Linux
-      - name: Install System Dependencies (Linux)
+      # Install system dependencies on Linux
+      - name: Install System Dependencies for devtools
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      # Install covr package
-      - name: Install covr Package
-        run: |
-          install.packages("covr", repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
-
-      # Verify covr installation
-      - name: Verify covr Installation
-        run: Rscript -e 'if (!requireNamespace("covr", quietly = TRUE)) stop("covr not installed")'
-
-      # Install the talk package from GitHub
-      - name: Install talk Package
+      # Install devtools package
+      - name: Install devtools Package
         run: |
           install.packages("devtools", repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
+
+      # Verify devtools installation
+      - name: Verify devtools Installation
+        run: Rscript -e 'if (!requireNamespace("devtools", quietly = TRUE)) stop("devtools not installed")'
+
+      # Install talk package from GitHub
+      - name: Install talk Package
+        run: |
           devtools::install_github("theharmonylab/talk")
         shell: Rscript {0}
 
