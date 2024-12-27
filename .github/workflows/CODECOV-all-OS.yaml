@@ -32,19 +32,14 @@ jobs:
       - uses: actions/checkout@v2
 
       # Install system dependencies for Linux
-      - name: Install System Dependencies for Linux
+      - name: Install System Dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev zlib1g-dev libpng-dev libjpeg-dev
 
-      # Install system dependencies for macOS
-      - name: Install System Dependencies for macOS
-        if: runner.os == 'macOS'
-        run: |
-          brew install libxml2
-          brew install curl
-          brew install openssl
+      - name: Check Disk Space Before
+        run: df -h
 
       - uses: r-lib/actions/setup-r@v2-branch
         with:
@@ -53,36 +48,24 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      # Install covr and devtools packages
-      - name: Install covr and devtools Packages
+      - name: Install covr and devtools Packages with Verbose Output
         run: |
-          install.packages(c("covr", "devtools"), repos = "https://cloud.r-project.org")
+          install.packages("covr", repos = "https://cloud.r-project.org", dependencies = TRUE, verbose = TRUE)
+          install.packages("devtools", repos = "https://cloud.r-project.org", dependencies = TRUE, verbose = TRUE)
         shell: Rscript {0}
 
-      # Verify installation of covr and devtools
-      - name: Verify Package Installation
-        run: |
-          if (!requireNamespace("covr", quietly = TRUE)) stop("covr not installed")
-          if (!requireNamespace("devtools", quietly = TRUE)) stop("devtools not installed")
-        shell: Rscript {0}
-
-      # Install the talk package from GitHub
       - name: Install talk Package
         run: |
           devtools::install_github("theharmonylab/talk")
         shell: Rscript {0}
 
-      # Run code coverage
       - name: Run Code Coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
+          library(covr)
           covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
         shell: Rscript {0}
 
-      # Debugging steps
-      - name: List Installed Packages
-        run: Rscript -e 'installed.packages()[, "Package"]'
-
-      - name: List Files for Debugging
-        run: ls -R
+      - name: Check Disk Space After
+        run: df -h
