@@ -31,12 +31,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Install system dependencies for Linux
-      - name: Install System Dependencies for devtools
-        if: runner.os == 'Linux'
+      # macOS-specific steps
+      - name: Fix Homebrew Issues
+        if: runner.os == 'macOS'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+          if [ -d "/opt/homebrew/Library/Taps/homebrew/homebrew-core" ]; then
+              cd /opt/homebrew/Library/Taps/homebrew/homebrew-core
+              git stash -u || echo "No changes to stash"
+              git clean -d -f || echo "No files to clean"
+          fi
+          brew uninstall openssl@1.1 ruby@3.0 || echo "Deprecated formulae not found"
+          brew install openssl@3 ruby || echo "Failed to install replacements"
+          brew doctor || echo "brew doctor warnings"
+          brew config || echo "brew config warnings"
+          brew update || echo "Failed to update Homebrew"
+          brew install libomp qpdf || echo "Failed to install utilities"
+          export DYLD_LIBRARY_PATH=$(brew --prefix libomp)/lib
+          echo "DYLD_LIBRARY_PATH=$(brew --prefix libomp)/lib" >> $GITHUB_ENV
 
       - uses: r-lib/actions/setup-r@v2-branch
         with:
@@ -45,32 +56,84 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      # Install and verify devtools package
-      - name: Install and Verify devtools
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: 3.9
+          miniconda-version: "latest"
+
+      - name: Query dependencies
         run: |
-          install.packages("devtools", repos = "https://cloud.r-project.org")
-          if (!requireNamespace("devtools", quietly = TRUE)) stop("devtools not installed")
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
-      # Backup: Install talk using remotes
-      - name: Install talk Package with remotes
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
         run: |
-          install.packages("remotes", repos = "https://cloud.r-project.org")
-          remotes::install_github("theharmonylab/talk")
+          while read -r cmd
+          do
+            eval sudo $cmd
+          done < <(Rscript -e 'cat(remotes::system_requirements("ubuntu", "20.04"), sep = "\n")')
+          sudo apt install libharfbuzz-dev
+          sudo apt install libfribidi-dev
+
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      # Run code coverage
-      - name: Run Code Coverage
+      - name: Fix Conda permissions on macOS
+        if: runner.os == 'macOS'
+        run: sudo chown -R $UID $CONDA
+
+      - name: Installing talk and testing it
+        run:  |
+          install.packages("devtools")
+          library(devtools)
+          devtools::install_github("theharmonylab/talk")
+          talk::talkrpp_install(prompt = FALSE)
+          talk::talkrpp_initialize(talkEmbed_test = TRUE)
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      # Test coverage
+      - name: Test coverage
         env:
+          OMP_MAX_ACTIVE_LEVELS: 2
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          library(covr)
-          covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
+        run: covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
         shell: Rscript {0}
 
-      # Debugging steps
-      - name: List Installed Packages
-        run: Rscript -e 'installed.packages()[, "Package"]'
-
-      - name: List Files for Debugging
+      # Debugging step to confirm coverage files are generated
+      - name: List files for debugging
         run: ls -R
+
+      # Wait to ensure all coverage data is saved
+      - name: Wait for coverage files to be ready
+        run: sleep 5
+
+      # Upload coverage to Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.config.os }}
+          verbose: true
+          files: "path/to/coverage/file"  # Replace with actual coverage file path
