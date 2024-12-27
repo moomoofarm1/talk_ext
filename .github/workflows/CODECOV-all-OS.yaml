@@ -44,14 +44,20 @@ jobs:
           sudo apt-get clean
           df -h
 
-      - name: Install System Dependencies
+      - name: Install System Dependencies for R Packages
         if: runner.os == 'Linux'
         run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'cat(remotes::system_requirements("ubuntu", "20.04"), sep = "\n")')
-          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Set CRAN Repository
+        run: echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' >> ~/.Rprofile
+
+      - name: Install Missing R Packages
+        run: |
+          install.packages("remotes")
+          remotes::install_cran(c("httr2", "usethis", "pkgdown", "rcmdcheck", "rversions", "urlchecker"))
+        shell: Rscript {0}
 
       - name: Check Disk Space (After Cleanup)
         if: runner.os == 'Linux'
@@ -70,7 +76,7 @@ jobs:
           python-version: 3.9
           miniconda-version: "latest"
 
-      - name: Query dependencies
+      - name: Query Dependencies
         run: |
           install.packages('remotes')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
@@ -90,11 +96,6 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-
-      - name: Install Python Dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          pip install --no-cache-dir numpy pandas scikit-learn matplotlib torch transformers torchaudio
 
       - name: Install Talk and Test It
         run: |
