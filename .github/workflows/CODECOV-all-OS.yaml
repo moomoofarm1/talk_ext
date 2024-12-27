@@ -31,11 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install System Dependencies for Graphics
+      - name: Install System Dependencies for covr
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libharfbuzz-dev libfribidi-dev libfreetype6-dev libfontconfig1-dev libpng-dev
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - uses: r-lib/actions/setup-r@v2-branch
         with:
@@ -44,41 +44,16 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      - name: Install Missing R Graphics Dependencies
-        run: |
-          install.packages(c("textshaping", "ragg"), repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
+      - name: Check R Version
+        run: Rscript --version
 
       - name: Install covr Package
+        if: runner.os == 'Linux'
         run: install.packages("covr", repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
-      - name: Install pkgdown and devtools
-        run: |
-          install.packages(c("pkgdown", "devtools"), repos = "https://cloud.r-project.org")
-        shell: Rscript {0}
-
-      - name: Install System Dependencies for R Packages
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-      - name: Install Talk and Test It
-        run: |
-          install.packages("devtools")
-          library(devtools)
-          devtools::install_github("theharmonylab/talk")
-          talk::talkrpp_install(prompt = FALSE)
-          talk::talkrpp_initialize(talkEmbed_test = TRUE)
-        shell: Rscript {0}
-
-      - name: Session Info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}
+      - name: List Installed R Packages
+        run: Rscript -e 'installed.packages()[, "Package"]'
 
       - name: Test Coverage
         env:
@@ -86,16 +61,3 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
         shell: Rscript {0}
-
-      - name: List Files for Debugging
-        run: ls -R
-
-      - name: Wait for Coverage Files to Be Ready
-        run: sleep 5
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ matrix.config.os }}
-          verbose: true
