@@ -38,30 +38,42 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
+      # System dependencies for Linux
       - name: Install System Dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      - name: Install and Verify talk Package from GitHub
+      # Install covr package
+      - name: Install covr Package
+        run: |
+          install.packages("covr", repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
+
+      # Verify covr installation
+      - name: Verify covr Installation
+        run: Rscript -e 'if (!requireNamespace("covr", quietly = TRUE)) stop("covr not installed")'
+
+      # Install the talk package from GitHub
+      - name: Install talk Package
         run: |
           install.packages("devtools", repos = "https://cloud.r-project.org")
           devtools::install_github("theharmonylab/talk")
-          library(talk)
         shell: Rscript {0}
 
-      - name: Verify Installed Package Files
-        run: ls -R /Users/runner/work/talk/talk
-
+      # Run code coverage
       - name: Run Code Coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
-          covr::codecov(
-            token = Sys.getenv("CODECOV_TOKEN")
-          )
+          library(covr)
+          covr::codecov(token = Sys.getenv("CODECOV_TOKEN"))
         shell: Rscript {0}
+
+      # Debugging steps
+      - name: List Installed Packages
+        run: Rscript -e 'installed.packages()[, "Package"]'
 
       - name: List Files for Debugging
         run: ls -R
