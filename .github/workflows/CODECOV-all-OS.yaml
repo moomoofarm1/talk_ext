@@ -31,24 +31,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check Disk Space (Before Cleanup)
-        if: runner.os == 'Linux'
-        run: df -h
-
-      - name: Clean Up Disk Space
-        if: runner.os == 'Linux'
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo apt-get clean
-          df -h
-
-      - name: Install System Dependencies for R Packages
+      - name: Install System Dependencies for Graphics
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev libfreetype6-dev libfontconfig1-dev libpng-dev
 
       - uses: r-lib/actions/setup-r@v2-branch
         with:
@@ -57,42 +44,21 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2-branch
 
-      - name: Install Missing R Packages
+      - name: Install Missing R Graphics Dependencies
         run: |
-          install.packages("remotes")
-          remotes::install_cran(c("httr2", "usethis", "pkgdown", "rcmdcheck", "rversions", "urlchecker"))
+          install.packages(c("textshaping", "ragg"), repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
-      - name: Check Disk Space (After Cleanup)
+      - name: Install pkgdown and devtools
+        run: |
+          install.packages(c("pkgdown", "devtools"), repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
+
+      - name: Install System Dependencies for R Packages
         if: runner.os == 'Linux'
-        run: df -h
-
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          python-version: 3.9
-          miniconda-version: "latest"
-
-      - name: Query Dependencies
         run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R Packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-      - name: Install Dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
-        shell: Rscript {0}
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
       - name: Install Talk and Test It
         run: |
