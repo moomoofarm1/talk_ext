@@ -49,6 +49,10 @@ jobs:
           install.packages(c("textshaping", "ragg"), repos = "https://cloud.r-project.org")
         shell: Rscript {0}
 
+      - name: Install covr Package
+        run: install.packages("covr", repos = "https://cloud.r-project.org")
+        shell: Rscript {0}
+
       - name: Install pkgdown and devtools
         run: |
           install.packages(c("pkgdown", "devtools"), repos = "https://cloud.r-project.org")
