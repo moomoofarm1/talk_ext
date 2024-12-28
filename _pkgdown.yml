@@ -1,10 +1,16 @@
+
 url: https://r-talk.org
 
+template:
+  package: tidytemplate
+  bootstrap: 5
+
+  includes:
+    in_header: |
+      <script defer data-domain="r-talk.org" src="https://plausible.io/js/plausible.js"></script>
+
 development:
-#  mode: release
-#   mode: auto
-  mode: default
-#   mode: unreleased
+  mode: auto
 
 home:
   title: talk
@@ -13,26 +19,12 @@ home:
     - text: Ask a question about talk using the r-talk tag
       href: https://stackoverflow.com/
 
-template:
-  bootstrap: 5
-  opengraph:
-    image:
-      src: man/figures/logo.png
-      alt: "talk analyzes using huggingface transformers"
-    twitter:
-      creator: "@oscarkjell"
-#      site: "@rstudio"
-      card: summary_large_image
-
 authors:
   Oscar Kjell:
     href: https://oscarkjell.se/
   Rajath Rao:
     href: https://github.com/Jarhatz
 
-twitter:
-  icon: "fab fa-twitter fa-lg"
-  href: http://twitter.com/OscarKjell
 
 reference:
   - title: Installation
@@ -45,19 +37,6 @@ reference:
     contents:
       - talkText
       - talkEmbed
-#  - title: Example Data
-#    contents:
-#      - talk_data
-
-#articles:
-#  - title: Set-up
-#    navbar: ~
-#    contents:
-#  - title: Tutorials
-#    desc: >
-#      These tutorials go into detail about various talk-analyses.
-#    contents:
-#      - talk_huggingface_in_r_extended_installation_guide
 
 news:
   one_page: true

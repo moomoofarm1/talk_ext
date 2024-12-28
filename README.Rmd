@@ -3,21 +3,19 @@ output: github_document #rmarkdown::html_vignette # #rmarkdown::html_vignette
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- -->
 
-```{r, include = FALSE}
+```{r}
+#| echo: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  fig.path = "man/figures/README-"
 )
-
-evaluate <- FALSE
-
 ```
 
+# talk <a href="https://r-talk.org"><img src="man/figures/logo.png" align="right" height="138" alt="talk website" /></a>
 
-# talk <img src="man/figures/logo.png" align="right" alt="" width="330" />
 
 <!-- badges: start -->
 
@@ -34,11 +32,21 @@ evaluate <- FALSE
 -->
 <!-- badges: end -->
 
-An R-package for analyzing natural language with transformers from HuggingFace using Natural Language Processing and Machine Learning.
+An R-package for analyzing natural language with transformers-based large language models. The `talk` package is part of the *R Language Analysis Suite*, including `talk`, `text` and `topics`. 
 
-The *talk*-package is part of the XXXX, including talk, text and topics. 
++ [`talk`](https://www.r-talk.org/) transforms voice recordings into text, audio features, or embeddings.<br>
+<br>
++ [`text`](https://www.r-text.org/) provide many language tasks such as converting digital text into word embeddings.<br>
+<br>
+`talk` and `text` provide access to Large Language Models from Hugging Face.<br>
+<br>
++ [`topics`](https://www.r-topics.org/) visualizes language patterns into topics to generate psychological insights.<br>
+<br>
+<br>
+![](man/figures/talk_text_topics1.svg){width=50%}
 
-*talk* is created through a collaboration between psychology and computer science to address research needs and ensure state-of-the-art techniques. It provides powerful functions tailored to test research hypotheses in social and behavior sciences for both relatively small and large datasets. *talk* is continuously tested on Ubuntu, Mac OS and Windows using the latest stable R version.
+<br>
+The *R Language Analysis Suite* is created through a collaboration between psychology and computer science to address research needs and ensure state-of-the-art techniques. The suite is continuously tested on Ubuntu, Mac OS and Windows using the latest stable R version.
 
 ### Short installation guide
 Most users simply need to run below installation code. 
@@ -83,7 +91,7 @@ See [HuggingFace](https://huggingface.co/models/) for a more comprehensive list 
 
 The ```talkText()``` function performs speech-to-text, transcribing audio input to text. `talkEmbed()```, transforms audio input to numeric representaions (embeddings) that can be used for downstream tasks such as guideline predictive models using the text-pacakge (see the text train functions).
 
-```{r short_word_embedding_example, eval = evaluate, warning=FALSE, message=FALSE}
+```{r short_word_embedding_example, eval = FALSE, warning=FALSE, message=FALSE}
 library(talk)
 # Transform the talk data to BERT word embeddings
 

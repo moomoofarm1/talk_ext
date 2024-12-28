@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- -->
 
-# talk <img src="man/figures/logo.png" align="right" alt="" width="330" />
+# talk <a href="https://r-talk.org"><img src="man/figures/logo.png" align="right" height="138" alt="talk website" /></a>
 
 <!-- badges: start -->
 
@@ -16,17 +17,24 @@ status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](
 &#10;-->
 <!-- badges: end -->
 
-An R-package for analyzing natural language with transformers from
-HuggingFace using Natural Language Processing and Machine Learning.
+An R-package for analyzing natural language with transformers-based
+large language models. The `talk` package is part of the *R Language
+Analysis Suite*, including `talk`, `text` and `topics`.
 
-The *talk*-package is part of the XXXX, including talk, text and topics.
+- [`talk`](https://www.r-talk.org/) transforms voice recordings into
+  text, audio features, or embeddings.<br> <br>
+- [`text`](https://www.r-text.org/) provide many language tasks such as
+  converting digital text into word embeddings.<br> <br> `talk` and
+  `text` provide access to Large Language Models from Hugging Face.<br>
+  <br>
+- [`topics`](https://www.r-topics.org/) visualizes language patterns
+  into topics to generate psychological insights.<br> <br> <br>
+  <img src="man/figures/talk_text_topics1.svg" style="width:50.0%" />
 
-*talk* is created through a collaboration between psychology and
-computer science to address research needs and ensure state-of-the-art
-techniques. It provides powerful functions tailored to test research
-hypotheses in social and behavior sciences for both relatively small and
-large datasets. *talk* is continuously tested on Ubuntu, Mac OS and
-Windows using the latest stable R version.
+<br> The *R Language Analysis Suite* is created through a collaboration
+between psychology and computer science to address research needs and
+ensure state-of-the-art techniques. The suite is continuously tested on
+Ubuntu, Mac OS and Windows using the latest stable R version.
 
 ### Short installation guide
 
