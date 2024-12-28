@@ -55,11 +55,12 @@ in R, and then make it work with talk required python packages.
 devtools::install_github("theharmonylab/talk")
 ```
 
+<!--
 [CRAN](https://CRAN.R-project.org/package=talk) version:
-
-``` r
+&#10;``` r
 install.packages("talk")
 ```
+-->
 
 2.  Install and initialize talk required python packages:
 
@@ -87,9 +88,9 @@ See [HuggingFace](https://huggingface.co/models/) for a more
 comprehensive list of models.
 
 The `talkText()` function performs speech-to-text, transcribing audio
-input to text. \`talkEmbed()\`\`\`, transforms audio input to numeric
-representaions (embeddings) that can be used for downstream tasks such
-as guideline predictive models using the text-pacakge (see the text
+input to text. `talkEmbed()`, transforms audio input to numeric
+representations (embeddings) that can be used for downstream tasks such
+as guideline predictive models using the text-package (see the text
 train functions).
 
 ``` r
