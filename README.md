@@ -17,6 +17,8 @@ status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](
 &#10;-->
 <!-- badges: end -->
 
+## Overview
+
 An R-package for analyzing natural language with transformers-based
 large language models. The `talk` package is part of the *R Language
 Analysis Suite*, including `talk`, `text` and `topics`.
