@@ -72,7 +72,15 @@ jobs:
             libharfbuzz-dev \
             libfribidi-dev \
             libfontconfig1-dev \
-            libcairo2-dev
+            libcairo2-dev \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libtiff5-dev \
+            libjpeg-dev \
+            libicu-dev \
+            default-jdk
+            sudo R CMD javareconf
 
       # Install R dependencies
       - name: Install R Dependencies
