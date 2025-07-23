@@ -95,7 +95,9 @@ jobs:
           libtiff5-dev \
           libjpeg-dev \
           libfontconfig1-dev \
-          libicu-dev
+          libicu-dev \
+          default-jdk \
+          sudo R CMD javareconf
 
       # Test 3. textrpp_install() to actually install when dependencies are satisfied.
       - name: talkrpp_install -- install the talk
