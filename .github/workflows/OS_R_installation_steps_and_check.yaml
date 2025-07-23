@@ -79,29 +79,23 @@ jobs:
           talk::talkrpp_install(prompt = FALSE)
         shell: Rscript {0}
 
-
-#       # Intall macOS dependencies to solve OMP issues
-#      - name: Install macOS OMP dependencies
-#        if: runner.os == 'macOS'
-#        run: |
-#          brew update || echo "Homebrew update failed"
-#          brew install libomp || echo "libomp installation failed"
-#          brew install qpdf || echo "qpdf installation failed but continuing"
-#          export DYLD_LIBRARY_PATH=$(brew --prefix libomp)/lib
-#          echo "DYLD_LIBRARY_PATH=$(brew --prefix libomp)/lib" >> $GITHUB_ENV
-#
-
       # Install system dependencies fo Ubuntu
-      # removed libfreetype6-dev \ libgit2-dev \  libcairo2-dev \
+      # removed default-jdk sudo R CMD javareconf
       - name: Install Ubuntu dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
           sudo apt-get install -y \
-          libfontconfig1-dev \
-          libfreetype6-dev \
+          libcurl4-openssl-dev \
+          libssl-dev \
           libharfbuzz-dev \
-          libfribidi-dev
+          libfribidi-dev \
+          libxml2-dev \
+          libpng-dev \
+          libtiff5-dev \
+          libjpeg-dev \
+          libfontconfig1-dev \
+          libicu-dev
 
       # Test 3. textrpp_install() to actually install when dependencies are satisfied.
       - name: talkrpp_install -- install the talk
