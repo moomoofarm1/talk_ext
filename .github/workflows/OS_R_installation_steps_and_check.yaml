@@ -98,7 +98,10 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y \
-          libfontconfig1-dev
+          libfontconfig1-dev \
+          libfreetype6-dev \
+          libharfbuzz-dev \
+          libfribidi-dev
 
       # Test 3. textrpp_install() to actually install when dependencies are satisfied.
       - name: talkrpp_install -- install the talk
