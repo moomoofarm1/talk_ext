@@ -19,8 +19,6 @@ jobs:
           - {os: macOS-latest, r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-24.04, r: 'release'}
-#          - {os: macOS-latest, r: '4.3.0', python: '3.9'}
-#          - {os: macOS-latest, r: 'release', python: '3.11'}
 
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -54,6 +52,13 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
+      # stringi for ubuntu
+      - name: Reinstall stringi from source on Ubuntu 24.04
+        if: matrix.config.os == 'ubuntu-24.04'
+        run: |
+          install.packages("stringi", type = "source")
+        shell: Rscript {0}
+
       # Install R dependencies
       - name: Install R Dependencies
         run: |
@@ -68,8 +73,6 @@ jobs:
           library(devtools)
           devtools::install_github("theharmonylab/talk")
           library(talk)
-#          log <- textDiagnostics()
-#          log
         shell: Rscript {0}
 
       # Test 2: test talkrpp_install() for stopping and informating which dependenies he user needs
