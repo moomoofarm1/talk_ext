@@ -16,6 +16,9 @@
     }
   )
 
+  nowarranty <- c("The topics package is provided 'as is' without any warranty of any kind. \n")
+
+
   packageStartupMessage(
     colourise(
       paste("This is talk.",
@@ -28,8 +31,11 @@
     colourise("Newer versions may have improved functions and updated defaults to reflect current understandings of the state-of-the-art.",
       fg = "green", bg = NULL
     ),
+    colourise(nowarranty,
+              fg = "purple", bg = NULL
+    ),
     colourise("\n\nFor more information about the package see www.r-talk.org.",
-      fg = "purple", bg = NULL
+      fg = "green", bg = NULL
     )
   )
 
