@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ "master" ]
 
-name: OS_installation_steps_and_check
+name: OS-installation-steps-and-check
 
 jobs:
   R-CMD-check:

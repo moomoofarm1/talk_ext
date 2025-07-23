@@ -18,7 +18,7 @@ jobs:
         config:
           - {os: macOS-latest, r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-20.04, r: 'release'}
+          - {os: ubuntu-24.04, r: 'release'}
 
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -84,7 +84,7 @@ jobs:
       # Cache R packages
       - name: Cache R Packages
         if: runner.os != 'Windows'
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
