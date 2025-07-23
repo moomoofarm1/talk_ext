@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- -->
 
 # talk <a href="https://r-talk.org"><img src="man/figures/logo.png" align="right" height="138" alt="talk website" /></a>
@@ -15,6 +16,7 @@ status](https://github.com/theharmonylab/talk/workflows/R-CMD-check/badge.svg)](
 &#10;[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing-1)
 &#10;[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/talk)](https://CRAN.R-project.org/package=talk)
 &#10;-->
+
 <!-- badges: end -->
 
 ## Overview

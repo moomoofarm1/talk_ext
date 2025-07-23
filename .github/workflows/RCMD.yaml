@@ -108,6 +108,7 @@ jobs:
             libtiff5-dev \
             libjpeg-dev \
             libicu-dev \
+            pandoc \
             default-jdk
             sudo R CMD javareconf
 
