@@ -61,6 +61,19 @@ jobs:
           install.packages("stringi", type = "source")
         shell: Rscript {0}
 
+
+      - name: Install system libraries for ragg/systemfonts/textshaping
+        if: matrix.config.os == 'ubuntu-24.04'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            libfreetype6-dev \
+            libpng-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfontconfig1-dev \
+            libcairo2-dev
+
       # Install R dependencies
       - name: Install R Dependencies
         run: |
@@ -83,25 +96,6 @@ jobs:
           talk::talkrpp_install(prompt = FALSE)
         shell: Rscript {0}
 
-      # Install system dependencies fo Ubuntu
-      # removed default-jdk sudo R CMD javareconf
-      - name: Install Ubuntu dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y \
-          libcurl4-openssl-dev \
-          libssl-dev \
-          libharfbuzz-dev \
-          libfribidi-dev \
-          libxml2-dev \
-          libpng-dev \
-          libtiff5-dev \
-          libjpeg-dev \
-          libfontconfig1-dev \
-          libicu-dev \
-          default-jdk \
-          sudo R CMD javareconf
 
       # Test 3. textrpp_install() to actually install when dependencies are satisfied.
       - name: talkrpp_install -- install the talk
