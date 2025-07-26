@@ -617,41 +617,13 @@ def process_audio_files(audio_files: List[str], args: dict) -> None:
             logging.info(f"Skipping already completed file: {audio_file}")
 
 
-def main(args: dict) -> None:
+def get_args() -> dict:
     """
-    Main entry point for processing audio files.
+    Parse command line arguments and return them as a dictionary.
+    This function can be used when running the script standalone.
     """
-    supported_audio_formats = (".wav", ".mp3", ".m4a")  # Extend if needed
-    if os.path.isdir(args["audio"]):
-        audio_files = [
-            os.path.join(args["audio"], f)
-            for f in os.listdir(args["audio"])
-            if f.endswith(supported_audio_formats)
-        ]
-    else:
-        audio_files = args["audio"].split(",")
-        print(f"Files to be diarized are: {audio_files}")
-
-    process_audio_files(audio_files, args)
-
-
-# ---------------------------------------------------------------------
-# PART 4: SCRIPT ENTRY POINT
-# ---------------------------------------------------------------------
-if __name__ == "__main__":
-    # If we have the special flag for worker mode, run diarize_worker
-    if "--diarize-worker" in sys.argv:
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--diarize-worker", action="store_true")
-        parser.add_argument("--temp-dir", required=True)
-        parser.add_argument("--device", default="cuda")
-        sub_args = parser.parse_args()
-        diarize_worker(temp_dir=sub_args.temp_dir, device=sub_args.device)
-        sys.exit(0)
-
-    # Otherwise, parse normal arguments for the main pipeline
     parser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--audio", required=True, 
+    parser.add_argument("-a", "--audio", 
                         help="Target audio file or directory.")
     parser.add_argument("--output-dir", dest="output_dir", default=None,
                         help="Directory to save results. Default: same as audio file's directory.")
@@ -674,10 +646,109 @@ if __name__ == "__main__":
     parser.add_argument("--rerun-completed-audio-file", action="store_true", 
                         dest="rerun_completed_audio_file", default=False,
                         help="Rerun pipeline for already completed audio files.")
+    parser.add_argument("--diarize-worker", action="store_true",
+                        help="Run in diarization worker mode.")
+    parser.add_argument("--temp-dir", 
+                        help="Temporary directory for diarization worker mode.")
     
     args = parser.parse_args()
-    args_dict = vars(args)  # Convert Namespace to dictionary
+    return vars(args)  # Convert Namespace to dictionary
+
+
+def transcribe_and_diarize(
+    audio: Optional[str] = None,
+    output_dir: Optional[str] = None,
+    stemming: bool = True,
+    suppress_numerals: bool = False,
+    model_name: str = "medium.en",
+    batch_size: int = 8,
+    max_retries: int = 1,
+    max_oom_retries: int = 2,
+    language: Optional[str] = None,
+    device: str = "cuda" if torch.cuda.is_available() else "cpu",
+    rerun_completed_audio_file: bool = False,
+    diarize_worker: bool = False,
+    temp_dir: Optional[str] = None
+) -> None:
+    """
+    Function to transcribe and diarize a single audio file.
+    
+    Args:
+        audio: Target audio file or directory
+        output_dir: Directory to save results. Default: same as audio file's directory
+        stemming: Enable source separation with Demucs
+        suppress_numerals: Suppress numerical digits in transcripts (converting to words)
+        model_name: Name of the Whisper model to use
+        batch_size: Batch size for batched inference
+        max_retries: Max Retries Limit before splitting on OOM
+        max_oom_retries: Max Retries after audio is split on OOM
+        language: Language spoken in the audio. None = auto-detect
+        device: If you have a GPU, use 'cuda', else 'cpu'
+        rerun_completed_audio_file: Rerun pipeline for already completed audio files
+        diarize_worker: Run in diarization worker mode
+        temp_dir: Temporary directory for diarization worker mode
+    """
+    # Handle diarization worker mode
+    if diarize_worker:
+        if temp_dir is None:
+            raise ValueError("temp_dir is required when diarize_worker is True")
+        diarize_worker(temp_dir=temp_dir, device=device)
+        return
+
+    # Regular transcription and diarization mode
+    if audio is None:
+        raise ValueError("audio is required when not in diarization worker mode")
+    
+    # Create args dictionary for compatibility with existing functions
+    args = {
+        "audio": audio,
+        "output_dir": output_dir,
+        "stemming": stemming,
+        "suppress_numerals": suppress_numerals,
+        "model_name": model_name,
+        "batch_size": batch_size,
+        "max_retries": max_retries,
+        "max_oom_retries": max_oom_retries,
+        "language": language,
+        "device": device,
+        "rerun_completed_audio_file": rerun_completed_audio_file
+    }
+    
+    supported_audio_formats = (".wav", ".mp3", ".m4a")  # Extend if needed
+    if os.path.isdir(args["audio"]):
+        audio_files = [
+            os.path.join(args["audio"], f)
+            for f in os.listdir(args["audio"])
+            if f.endswith(supported_audio_formats)
+        ]
+    else:
+        audio_files = args["audio"].split(",")
+        print(f"Files to be diarized are: {audio_files}")
+
+    process_audio_files(audio_files, args)
+
+
+# ---------------------------------------------------------------------
+# PART 4: SCRIPT ENTRY POINT
+# ---------------------------------------------------------------------
+if __name__ == "__main__":
+    # Parse arguments and configure logging
+    args_dict = get_args()
     print(args_dict) 
     logging.basicConfig(level=logging.INFO)
 
-    main(args_dict)
+    transcribe_and_diarize(
+        audio=args_dict.get("audio"),
+        output_dir=args_dict["output_dir"],
+        stemming=args_dict["stemming"],
+        suppress_numerals=args_dict["suppress_numerals"],
+        model_name=args_dict["model_name"],
+        batch_size=args_dict["batch_size"],
+        max_retries=args_dict["max_retries"],
+        max_oom_retries=args_dict["max_oom_retries"],
+        language=args_dict["language"],
+        device=args_dict["device"],
+        rerun_completed_audio_file=args_dict["rerun_completed_audio_file"],
+        diarize_worker=args_dict.get("diarize_worker", False),
+        temp_dir=args_dict.get("temp_dir")
+    )
