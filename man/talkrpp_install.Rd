@@ -35,10 +35,15 @@ automatically find the path}
 
 \item{force_conda}{Boolean; force re-installation if Miniconda is already installed at the requested path?}
 
-\item{rpp_version}{character; default is "rpp_version_system_specific_defaults", because diffent systems require
-different combinations of python version and packages. It is also possible to
-specify your own, such as c("torch==2.0.0", "transformers==4.19.2", "numpy", "pandas", "nltk", "scikit-learn",
-"datasets", "evaluate").}
+\item{rpp_version}{Character. Specifies the version set of Python packages to install.
+The default is "rpp_version_system_specific_defaults", which automatically selects compatible
+Python and package versions based on the user's operating system (e.g., macOS, Windows, Linux).
+
+You may also provide a custom character vector of specific package versions
+(e.g., c("torch==2.0.0", "transformers==4.19.2")) for advanced use cases.
+
+Alternatively, set to "talk_diarize" to install a fixed environment required for the diarization
+functionality, which currently depends on a specific combination of package versions.}
 
 \item{python_version}{character; default is "python_version_system_specific_defaults". You can specify your
 Python version for the condaenv yourself.

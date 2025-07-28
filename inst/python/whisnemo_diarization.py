@@ -731,24 +731,24 @@ def transcribe_and_diarize(
 # ---------------------------------------------------------------------
 # PART 4: SCRIPT ENTRY POINT
 # ---------------------------------------------------------------------
-if __name__ == "__main__":
-    # Parse arguments and configure logging
-    args_dict = get_args()
-    print(args_dict) 
-    logging.basicConfig(level=logging.INFO)
-
-    transcribe_and_diarize(
-        audio=args_dict.get("audio"),
-        output_dir=args_dict["output_dir"],
-        stemming=args_dict["stemming"],
-        suppress_numerals=args_dict["suppress_numerals"],
-        model_name=args_dict["model_name"],
-        batch_size=args_dict["batch_size"],
-        max_retries=args_dict["max_retries"],
-        max_oom_retries=args_dict["max_oom_retries"],
-        language=args_dict["language"],
-        device=args_dict["device"],
-        rerun_completed_audio_file=args_dict["rerun_completed_audio_file"],
-        diarize_worker=args_dict.get("diarize_worker", False),
-        temp_dir=args_dict.get("temp_dir")
-    )
+#if __name__ == "__main__":
+#    # Parse arguments and configure logging
+#    args_dict = get_args()
+#    print(args_dict) 
+#    logging.basicConfig(level=logging.INFO)
+#
+#    transcribe_and_diarize(
+#        audio=args_dict.get("audio"),
+#        output_dir=args_dict["output_dir"],
+#        stemming=args_dict["stemming"],
+#        suppress_numerals=args_dict["suppress_numerals"],
+#        model_name=args_dict["model_name"],
+#        batch_size=args_dict["batch_size"],
+#        max_retries=args_dict["max_retries"],
+#        max_oom_retries=args_dict["max_oom_retries"],
+#        language=args_dict["language"],
+#        device=args_dict["device"],
+#        rerun_completed_audio_file=args_dict["rerun_completed_audio_file"],
+#        diarize_worker=args_dict.get("diarize_worker", False),
+#        temp_dir=args_dict.get("temp_dir")
+#    )

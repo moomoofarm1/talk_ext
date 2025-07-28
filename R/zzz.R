@@ -16,26 +16,42 @@
     }
   )
 
+  OMP_msg <- ""
+  if (Sys.info()[["sysname"]] == "Darwin") {
+    skip_patch <- Sys.getenv("TEXT_SKIP_OMP_PATCH", unset = "FALSE")
+    if (tolower(skip_patch) != "true") {
+      Sys.setenv(OMP_NUM_THREADS = "1")
+      Sys.setenv(OMP_MAX_ACTIVE_LEVELS = "1")
+      Sys.setenv(KMP_DUPLICATE_LIB_OK = "TRUE")
+      OMP_msg <- c("\n MacOS detected: Setting OpenMP environment variables to avoid potential crash due to libomp conflicts. \n")
+    } else {
+      OMP_msg <- c("Skipped setting OpenMP environment variables (TEXT_SKIP_OMP_PATCH is TRUE)")
+    }
+  }
+
   nowarranty <- c("The topics package is provided 'as is' without any warranty of any kind. \n")
 
 
   packageStartupMessage(
     colourise(
       paste("This is talk.",
-        talk_version_nr,
-        ".\n",
-        sep = ""
+            talk_version_nr,
+            ".\n",
+            sep = ""
       ),
       fg = "blue", bg = NULL
     ),
     colourise("Newer versions may have improved functions and updated defaults to reflect current understandings of the state-of-the-art.",
-      fg = "green", bg = NULL
+              fg = "green", bg = NULL
+    ),
+    colourise(OMP_msg,
+              fg = "purple", bg = NULL
     ),
     colourise(nowarranty,
               fg = "purple", bg = NULL
     ),
     colourise("\n\nFor more information about the package see www.r-talk.org.",
-      fg = "green", bg = NULL
+              fg = "green", bg = NULL
     )
   )
 

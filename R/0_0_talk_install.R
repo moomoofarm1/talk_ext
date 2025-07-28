@@ -23,10 +23,15 @@ conda_args <- reticulate:::conda_args
 #' @param force_conda Boolean; force re-installation if Miniconda is already installed at the requested path?
 #' @param pip \code{TRUE} to use pip for installing rpp If \code{FALSE}, conda
 #' package manager with conda-forge channel will be used for installing rpp.
-#' @param rpp_version character; default is "rpp_version_system_specific_defaults", because diffent systems require
-#' different combinations of python version and packages. It is also possible to
-#' specify your own, such as c("torch==2.0.0", "transformers==4.19.2", "numpy", "pandas", "nltk", "scikit-learn",
-#' "datasets", "evaluate").
+#' @param rpp_version Character. Specifies the version set of Python packages to install.
+#' The default is "rpp_version_system_specific_defaults", which automatically selects compatible
+#' Python and package versions based on the user's operating system (e.g., macOS, Windows, Linux).
+#'
+#' You may also provide a custom character vector of specific package versions
+#' (e.g., c("torch==2.0.0", "transformers==4.19.2")) for advanced use cases.
+#'
+#' Alternatively, set to "talk_diarize" to install a fixed environment required for the diarization
+#' functionality, which currently depends on a specific combination of package versions.
 #' @param python_version character; default is "python_version_system_specific_defaults". You can specify your
 #' Python version for the condaenv yourself.
 #'   installation.
@@ -44,16 +49,50 @@ conda_args <- reticulate:::conda_args
 #' talkrpp_install(conda = "~/anaconda/bin/")
 #' }
 #' @export
-talkrpp_install <- function(conda = "auto",
-                            update_conda = FALSE,
-                            force_conda = FALSE,
-                            rpp_version = "rpp_version_system_specific_defaults",
-                            python_version = "python_version_system_specific_defaults",
-                            envname = "talkrpp_condaenv",
-                            pip = TRUE,
-                            python_path = NULL,
-                            prompt = TRUE) {
+talkrpp_install <- function(
+    conda = "auto",
+    update_conda = FALSE,
+    force_conda = FALSE,
+    rpp_version = "rpp_version_system_specific_defaults",
+    python_version = "python_version_system_specific_defaults",
+    envname = "talkrpp_condaenv",
+    pip = TRUE,
+    python_path = NULL,
+    prompt = TRUE) {
+
   # Set system specific default versions
+  if (rpp_version[[1]] == "talk_diarize") {
+    rpp_version <- c(
+
+      #### for Nemo
+      "cython==3.0.11",
+      "wget==3.2",
+      "nemo_toolkit==1.20.0",
+      "git+https://github.com/m-bain/whisperX.git@78dcfaab51005aa703ee21375f81ed31bc248560",
+      "git+https://github.com/adefossez/demucs.git@b9ab48cad45976ba42b2ff17b229c071f0df9390",
+      "git+https://github.com/oliverguhr/deepmultilingualpunctuation.git@5a0dd7f4fd56687f59405aa8eba1144393d8b74b",
+      "git+https://github.com/MahmoudAshraf97/ctc-forced-aligner.git@abd458dd879305566cd4ed0c8624c95f22e3126a",
+      "huggingface-hub==0.23.2",
+      #     "ctranslate2==3.24.0",
+      "PyYAML==6.0.2",
+      "hydra-core==1.3.2",
+      "youtokentome==1.0.5", # 1.0.6
+      "inflect==7.4.0",
+      "webdataset==0.2.100",
+      "editdistance==0.8.1",
+      "jiwer==3.0.5",
+      ###        "ffmpeg==1.4", instead: brew install ffmpeg
+      "pytorch-lightning==1.9.4",
+      "ipython==8.31.0",
+      "ffmpeg-python==0.2.0",
+      "librosa",
+      "torchaudio",
+      "llvmlite==0.40.0",
+      "numba==0.57.0"
+    )
+
+  }
+
   if (rpp_version[[1]] == "rpp_version_system_specific_defaults") {
     if (is_osx() || is_linux()) {
       rpp_version <- c(
@@ -65,7 +104,7 @@ talkrpp_install <- function(conda = "auto",
         "soundfile==0.12.1",
         "transformers==4.38.0",
         "huggingface_hub==0.20.0",
-
+#
         "argparse",
         "pandas",
         "tqdm",
@@ -95,11 +134,11 @@ talkrpp_install <- function(conda = "auto",
 
   if (python_version == "python_version_system_specific_defaults") {
     if (is_osx() || is_linux()) {
-      python_version <- "3.9.0"
+      python_version <- "3.10.12"
     }
 
     if (is_windows()) {
-      python_version <- "3.9.0"
+      python_version <- "3.10.12"
     }
   }
 
